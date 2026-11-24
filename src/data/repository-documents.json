@@ -1,0 +1,629 @@
+{
+  "repositories": {
+    "jiamingshi-jsphys/chelate-shell": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-jiamingshi-jsphys-chelate-shell-chelate-shell\">Chelate Shell</h1>\n<blockquote>\n<p><strong>The missing orchestrator for your local agent skills.</strong>\nOrchestrating scattered local skills into a deterministic research and engineering workflow.</p>\n</blockquote>\n<p><strong>English</strong> · <a href=\"https://github.com/JiamingShi-JsPhys/chelate-shell/blob/main/README_zh.md\">简体中文</a></p>\n<p><strong>Version:</strong> 1.1.2 | <strong>Core Skills:</strong> 14 | <strong>Layers:</strong> 4 (workspace / ingest / gates / processors)</p>\n<hr>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-security--open-source-statement\">Security &#x26; Open Source Statement</h2>\n<blockquote>\n<p><strong>Disclaimer</strong>: This repository contains auxiliary tools developed by the author to automate research workflows. It is not a peer-reviewed academic project. Some boilerplate or utility scripts may have been generated with the assistance of AI, and have been integrated with high-level review and modifications by the author. The author assumes no responsibility for any third-party code issues, but commits to promptly addressing any valid claims.</p>\n<p>This tool <strong>will never do the experiment for you</strong>. Data must be collected manually by students in the lab; AI is absolutely physically isolated during the in-lab stage. Generated reports are merely \"data-analysis drafts\", and final academic responsibility lies with the user and their institution.</p>\n</blockquote>\n<hr>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-why-chelate-shell\">Why Chelate Shell?</h2>\n<p>In the current AI ecosystem, individual skills excel at solving isolated problems: validating formulas, tracking videos, or organizing files. However, when an Agent faces a complex task, it often struggles to determine <strong>which skill to invoke, in what order, and where to place the outputs</strong>.</p>\n<p>Chelate Shell is an <strong>Orchestrator</strong>. It does not write low-level code to solve domain-specific problems. Instead, acting like a senior project manager, it decomposes user intents, enforces a standardized workspace directory structure, and <strong>deterministically</strong> routes tasks to the appropriate skills.</p>\n<h3 id=\"readme-jiamingshi-jsphys-chelate-shell-v110-architecture-physical-flatness--adapter-isolation--microkernel\">v1.1.0 Architecture: physical flatness + adapter isolation + microkernel</h3>\n<p>All 14 skills live <strong>flat</strong> under <code>skills/</code> — no nested category folders — so AI\nplatforms that scan a single directory level see every skill. Logical layering\nlives in each skill's <code>manifest.json</code>, and a tiny microkernel (<code>core/</code>) reads\nthose manifests to build the pipeline.</p>\n<pre><code class=\"language-text\">chelate/\n├── .claude-plugin/            # Claude Code plugin manifest + marketplace\n├── .codebuddy-plugin/         # CodeBuddy plugin manifest + marketplace\n├── .codex-plugin/             # Codex plugin manifest + marketplace\n├── .dsh-plugin/               # DeepSeek Harness CJS entry (apply(ctx))\n├── assets/                    # icon.png (shared by the plugin manifests)\n├── index.js                   # CJS plugin entry (dsh ecosystem)\n├── package.json               # npm/dsh packaging metadata\n├── cordis.patch.yml           # cordis bundle patch\n├── ORCHESTRATOR.md            # agent-facing routing contract (v1.1.0)\n├── core/                      # microkernel\n│   ├── router.py                # dispatcher: manifest-driven pipeline\n│   ├── registry.py              # scans skills/ into a routing table\n│   └── sandbox.py               # dependency resolution / degradation\n├── contracts/                   # global contracts\n│   ├── gate_result.py           # {skill, status, evidence_level, reason, artifacts}\n│   └── schema.json              # manifest.json validation spec\n├── lib/chelate_core/            # shared core library (logic lives here)\n│   ├── adapter.py               # thin-adapter toolkit: argparse, gate emission, legacy runner\n│   ├── paths.py / yamlmini.py   # path resolution / assets/config.yaml loading\n│   ├── pdf_text.py              # PDF extraction core (pdfminer.six / pypdf)\n│   ├── arxiv_search.py          # arXiv search core\n│   ├── bibtex_norm.py           # BibTeX parse / dedupe / normalize core\n│   ├── doi_audit.py             # DOI extraction + Crossref verification core\n│   ├── csv_profile.py           # CSV profiling core (pandas)\n│   └── formula_merge.py         # legacy D1-D5 + pint verdict merge policy\n├── skills/                      # 14 skills, completely flat\n│   ├── task-organizer/          #   workspace  (infrastructure)\n│   ├── multi-dim-manager/       #   workspace  (infrastructure)\n│   ├── document-evolution-tracker/ # workspace (infrastructure)\n│   ├── capstone-labmate/        #   ingest     (extraction)\n│   ├── video-tracker/           #   ingest     (extraction)\n│   ├── fulltext-extractor/      #   ingest     (extraction, new)\n│   ├── literature-retriever/    #   ingest     (extraction, new)\n│   ├── bibtex-normalizer/       #   ingest     (extraction, new)\n│   ├── formula-validator/       #   gates\n│   ├── longitudinal-analysis/   #   gates\n│   ├── conflict-detector/       #   gates\n│   ├── reference-auditor/       #   gates      (new)\n│   ├── data-profiler/           #   gates      (new)\n│   └── ai-trace-remover/        #   processors\n│       ├── SKILL.md             #   instructions for the AI platform\n│       ├── manifest.json        #   metadata for the Router\n│       ├── README.md            #   human-facing documentation\n│       ├── LICENSE              #   MIT (per-skill copy)\n│       ├── run.py               #   thin adapter: CLI wiring only\n│       └── assets/              #   config.yaml and other dead resources\n└── tests/                       # automated test suite (156 tests)\n</code></pre>\n<p>Every skill directory carries the same surface: <code>SKILL.md</code> for the AI,\n<code>manifest.json</code> for the Router, <code>README.md</code> for humans, <code>LICENSE</code>, and\n<code>run.py</code> — a <strong>thin adapter</strong> that only parses arguments and formats the\ngate result.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-installation\">Installation</h2>\n<p>This repository is a cross-platform agent skill suite. Choose the installation method that fits you best.</p>\n<h3 id=\"readme-jiamingshi-jsphys-chelate-shell-option-1-install-via-git-link-recommended-agent-native\">Option 1: Install via Git link (recommended, agent-native)</h3>\n<ol>\n<li>Open your platform's plugin manager (or marketplace configuration) UI.</li>\n<li>Choose \"Install from Git repository\" or \"Add custom marketplace\".</li>\n<li>Enter the repository URL and confirm: <code>https://github.com/JiamingShi-JsPhys/chelate-shell</code></li>\n</ol>\n<h3 id=\"readme-jiamingshi-jsphys-chelate-shell-option-2-let-your-ai-install-it\">Option 2: Let your AI install it</h3>\n<p>Copy the following prompt to your AI Agent; it will clone the repository and configure it automatically:</p>\n<blockquote>\n<p>\"Please visit the GitHub repository <code>https://github.com/JiamingShi-JsPhys/chelate-shell</code>, clone it, and register all skills under the <code>skills/</code> directory with your system according to the current agent platform's conventions.\"</p>\n</blockquote>\n<blockquote>\n<p><strong>Warning</strong>: When using AI auto-install, the AI will very likely break apart the standalone skills under <code>skills/</code> and copy them flat into the platform's global skills directory. This disables Chelate Shell's microkernel auto-orchestration architecture and degrades it to 14 loose skills. If you need the full plugin orchestration functionality, use Option 1.</p>\n</blockquote>\n<p><strong>Environment dependencies</strong>: The microkernel and most skills depend only on the Python standard library. A few data/network-related skills require third-party libraries (see the dependency matrix below). When a dependency is missing, the system degrades gracefully to an <code>UNVERIFIED</code> gate with a hint instead of crashing.</p>\n<h3 id=\"readme-jiamingshi-jsphys-chelate-shell-debugging\">Debugging</h3>\n<p>One switch, every layer: add <code>--debug</code> to any <code>cli.py</code> subcommand\n(<code>list</code> / <code>run</code> / <code>pipeline</code>) or to <code>core/router.py</code>, or export\n<code>CHELATE_DEBUG=1</code> for the whole process tree. The flag sets the same\nenvironment variable, so skill subprocesses inherit it automatically.</p>\n<pre><code class=\"language-bash\"># debug one skill directly (flag may sit before or after the skill name)\npython cli.py run data-profiler --root /path/to/workspace --action profile --input data.csv --debug\n\n# debug a whole pipeline\nCHELATE_DEBUG=1 python cli.py pipeline --root /path/to/workspace --mode c --selected reference-auditor\n</code></pre>\n<p>With the switch on, stderr receives <code>[chelate:debug]</code> lines covering the\nregistry scan, the resolved subprocess command and cwd, the dependency\nverdict (degraded / missing), the return code and duration, the last\nstderr lines of each skill, the legacy action → module mapping, and the\nfinal gate path with its status. <strong>stdout is never polluted</strong> — the single\ngate-contract JSON line stays machine-parseable. Output colors follow\n<code>NO_COLOR</code> / <code>CHELATE_FORCE_COLOR</code>.</p>\n<p>For post-mortem analysis, every run leaves machine-readable traces:\n<code>process/gates/&#x3C;skill>_&#x3C;ts>.json</code> (one gate result per skill),\n<code>results/pipeline_report_&#x3C;ts>.json</code> (the full decision record, including\nthe command, degraded flag, missing dependencies, return code and seconds\nof every skill), and <code>_broadcast/pipeline_index_&#x3C;ts>.json</code> (the compact\ncontext-compression index).</p>\n<hr>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-quick-start\">Quick start</h2>\n<pre><code class=\"language-bash\"># list the 14 registered skills\npython cli.py list\n\n# run one skill directly\npython cli.py run reference-auditor --root /path/to/workspace \\\n    --action audit --input draft.md\n\n# dry-run a pipeline (shows the planned execution order)\npython cli.py pipeline --root /path/to/workspace --mode a --input-kind pdf --dry-run\n\n# full pipeline: ingest -> gates -> processors\npython cli.py pipeline --root /path/to/workspace --mode a --input-kind pdf\n\n# gates only, with per-skill arguments\npython cli.py pipeline --root /path/to/workspace --mode c \\\n    --selected reference-auditor \\\n    --skill-arg \"reference-auditor:--input draft.md\"\n\n# declare the run's input files: each is wired as --input to the plan\n# skills whose manifest input_types declare its type (missing files fail\n# fast with exit code 2 before anything runs)\npython cli.py pipeline --root ./test_workspace --inputs draft.md data.csv\n</code></pre>\n<p>Pipeline modes: <code>a</code> auto (ingest → gates → processors), <code>b</code> extract-only,\n<code>c</code> gates-only. <code>--inputs</code> narrows the plan to the skills that can consume\nthe declared files (an explicit <code>--selected</code> list always wins); a file\nwhose extension declares no manifest type is reported as an <code>[INPUT]</code>\nwarning and wires to nothing.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-the-14-skills\">The 14 skills</h2>\n<p><strong>Workspace (infrastructure)</strong></p>\n<ul>\n<li><code>task-organizer</code> — four-zone workspace init, file organization (C1–C8\nvalidation, dedupe, snapshots, undo/redo), <code>_broadcast/INDEX.md</code> context index</li>\n<li><code>multi-dim-manager</code> — parameter-space expansion, SHA-256 snapshots, hash\naudit logs, safe rollback to any past round</li>\n<li><code>document-evolution-tracker</code> — paragraph-level diff across document\nversions with concept-lineage tracking</li>\n</ul>\n<p><strong>Ingest (extraction)</strong></p>\n<ul>\n<li><code>capstone-labmate</code> — PASCO Capstone <code>.cap</code> binary parsing, CSV/JSON\nconversion, watermarked draft reports</li>\n<li><code>video-tracker</code> — OpenCV coordinate extraction (CSRT/Template trackers),\nFFT spectrum analysis, physics consistency probes</li>\n<li><code>fulltext-extractor</code> <em>(new)</em> — pdfminer.six text extraction into <code>process/</code> (pypdf fallback)</li>\n<li><code>literature-retriever</code> <em>(new)</em> — arXiv keyword search to JSON</li>\n<li><code>bibtex-normalizer</code> <em>(new)</em> — <code>.bib</code> parsing, dedupe, normalized output</li>\n</ul>\n<p><strong>Gates</strong></p>\n<ul>\n<li><code>formula-validator</code> — SymPy D1–D5 layers (dimensional analysis, limit\nenumeration, numeric sampling, symbolic proof) merged with a <code>pint</code>\nphysical-unit cross-check</li>\n<li><code>longitudinal-analysis</code> — time-series OLS plus R-backed LMM (lme4),\nmediation (lavaan) and sensitivity analysis; degrades to pure-Python steps\nwhen Rscript is absent</li>\n<li><code>conflict-detector</code> — cross-document contradiction engine with regex\nnumber extraction for hard cross-checks</li>\n<li><code>reference-auditor</code> <em>(new)</em> — DOI extraction and Crossref verification;\na non-existent DOI fails the gate</li>\n<li><code>data-profiler</code> <em>(new)</em> — pandas CSV profiling: row counts, missing-value\nstatistics, 1.5·IQR outlier ratios, duplicates, constant columns</li>\n</ul>\n<p><strong>Processors</strong></p>\n<ul>\n<li><code>ai-trace-remover</code> — template-sentence removal and a 0–100 \"AI-likeness\"\nscore (clean-room English lexicon plus the full Chinese lexicon)</li>\n</ul>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-migration-guarantee-v100--v110\">Migration guarantee (v1.0.0 → v1.1.0)</h2>\n<p>The nine legacy skills were migrated <strong>byte-for-byte</strong>: 179 Python files\n(~37,400 lines) plus all non-code assets were copied with SHA-256\nverification, and the internal package layout (<code>scripts.*</code>, <code>src.*</code>, <code>R/</code>,\n<code>templates/</code>, <code>config/</code>) is unchanged. The only additions are each skill's\nroot <code>run.py</code> adapter, its <code>manifest.json</code>, and — for <code>formula-validator</code> —\na new <code>scripts/core/pint_units.py</code> layer. A guard test\n(<code>tests/test_capability_guard.py</code>) re-verifies file parity and the presence\nof every key module function on every run.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-tests\">Tests</h2>\n<pre><code class=\"language-bash\">python -m pytest tests/ -q     # 156 tests\n</code></pre>\n<p>The suite covers the gate contract, manifest schema validation, flat-layout\nenforcement, pipeline planning and FAIL termination, the migration guard,\nthe legacy D1–D5 and FFT/physics probes, the five new skills, workspace\ninput-path resolution, <code>--inputs</code> auto-wiring (manifest-type matching,\nplan narrowing, fail-fast on missing files), the unified debug layer\n(switch semantics plus a real-subprocess integration test for the router's\ndebug plumbing), and the manifest-contract suite (plugin manifests for all\nfour host platforms: author-object, no string <code>skills</code>, no <code>icon</code>, version\nsync; SKILL.md frontmatter agreeing with each manifest).</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-requirements\">Requirements</h2>\n<p>Python 3.10+. Per-skill dependencies are declared in each <code>manifest.json</code>\nand resolved at run time by <code>core/sandbox.py</code>; a missing dependency\ndegrades the skill to an <code>UNVERIFIED</code> gate instead of crashing the pipeline.</p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Skill</th><th>Required dependencies</th><th>Optional (degrade gracefully)</th></tr></thead><tbody><tr><td>video-tracker</td><td>numpy, opencv</td><td>matplotlib (FFT plots), PyYAML (<code>.yaml</code> configs)</td></tr><tr><td>formula-validator</td><td>sympy, numpy, pint</td><td>—</td></tr><tr><td>longitudinal-analysis</td><td>pandas</td><td>numpy, R (lme4/lavaan), python-docx (<code>--format docx</code> export), PyYAML (<code>.yaml</code> configs)</td></tr><tr><td>capstone-labmate</td><td><em>(stdlib only)</em></td><td>numpy (vectorized paths), matplotlib (plots), pypdf (PDF text)</td></tr><tr><td>task-organizer</td><td><em>(stdlib only)</em></td><td>openpyxl (fast <code>.xlsx</code> path), PyPDF2 (one PDF backend)</td></tr><tr><td>multi-dim-manager, document-evolution-tracker, conflict-detector</td><td><em>(stdlib only)</em></td><td>PyYAML (<code>.yaml</code> configs; JSON configs need nothing)</td></tr><tr><td>ai-trace-remover</td><td><em>(stdlib only)</em></td><td>—</td></tr><tr><td>fulltext-extractor</td><td>pdfminer.six / pypdf</td><td>—</td></tr><tr><td>literature-retriever</td><td><code>arxiv</code></td><td>—</td></tr><tr><td>bibtex-normalizer</td><td><code>bibtexparser</code></td><td>—</td></tr><tr><td>reference-auditor</td><td><code>requests</code></td><td>—</td></tr><tr><td>data-profiler</td><td><code>pandas</code></td><td>—</td></tr></tbody></table>\n<p>Third-party packages are used at run time only; none are vendored into this\nrepository, and each remains under its own license (e.g. numpy/pandas BSD,\nOpenCV Apache-2.0, SymPy/pint/requests/bibtexparser/arxiv BSD/MIT/Apache,\npdfminer. six is MIT; pypdf is BSD-3-Clause — both permissive). Optional dependencies are imported behind\n<code>try</code>/<code>ImportError</code> or action-scoped conditionals, so a missing one degrades\nthat feature (or that config format) — never the whole skill.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-trademarks\">Trademarks</h2>\n<p>\"PASCO\" and \"Capstone\" are registered trademarks of PASCO Scientific. The\n<code>capstone-labmate</code> skill is an independent, third-party interoperability and\neducational-assistance tool. It is not affiliated with, endorsed by, or\nsponsored by PASCO Scientific. All <code>.cap</code> parsing runs locally; users are\nresponsible for complying with their institution's academic-integrity policy.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chelate-shell-license\">License</h2>\n<p>MIT. See <a href=\"https://github.com/JiamingShi-JsPhys/chelate-shell/blob/main/LICENSE\">LICENSE</a>. Each skill directory also carries its own\n<code>LICENSE</code> file with the same terms.</p>",
+      "toc": [
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-chelate-shell",
+          "value": "Chelate Shell",
+          "level": 1
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-security--open-source-statement",
+          "value": "Security &amp; Open Source Statement",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-why-chelate-shell",
+          "value": "Why Chelate Shell?",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-v110-architecture-physical-flatness--adapter-isolation--microkernel",
+          "value": "v1.1.0 Architecture: physical flatness + adapter isolation + microkernel",
+          "level": 3
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-installation",
+          "value": "Installation",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-option-1-install-via-git-link-recommended-agent-native",
+          "value": "Option 1: Install via Git link (recommended, agent-native)",
+          "level": 3
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-option-2-let-your-ai-install-it",
+          "value": "Option 2: Let your AI install it",
+          "level": 3
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-debugging",
+          "value": "Debugging",
+          "level": 3
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-quick-start",
+          "value": "Quick start",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-the-14-skills",
+          "value": "The 14 skills",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-migration-guarantee-v100--v110",
+          "value": "Migration guarantee (v1.0.0 → v1.1.0)",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-tests",
+          "value": "Tests",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-requirements",
+          "value": "Requirements",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-trademarks",
+          "value": "Trademarks",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chelate-shell-license",
+          "value": "License",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/JiamingShi-JsPhys/chelate-shell/blob/main/README.md",
+      "path": "README.md",
+      "sha": "4a8b6b2a2b9aae8fae48d01afa2757e88943bbd1",
+      "syncedAt": "2026-10-25T08:45:13.940Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T08:45:14.032Z"
+        },
+        "license": {
+          "status": "ready",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 Jiaming Shi</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "toc": [],
+          "sourceUrl": "https://github.com/JiamingShi-JsPhys/chelate-shell/blob/main/LICENSE",
+          "path": "LICENSE",
+          "sha": "ce57f25f58fc614dbc94b2eed8bc1506b200e37d",
+          "syncedAt": "2026-10-25T08:45:14.364Z"
+        }
+      }
+    },
+    "jiamingshi-jsphys/chem-notes": {
+      "status": "ready",
+      "html": "<p><strong>English</strong> | <a href=\"https://github.com/JiamingShi-JsPhys/chem-notes/blob/main/README_zh.md\">简体中文</a></p>\n<h1 id=\"readme-jiamingshi-jsphys-chem-notes-general-chemistry--notes\">General Chemistry — Notes</h1>\n<p>This project contains lecture notes on general chemistry, written with the reusable <code>chemistry.cls</code> document class and typeset in LaTeX. Both English and Chinese versions are provided.</p>\n<p><strong>Author:</strong> Jiaming Shi, Department of Physics, Westlake University.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chem-notes-compiled-pdfs\">Compiled PDFs</h2>\n<p>The latest compiled PDFs are available on the Releases page:</p>\n<ul>\n<li><a href=\"https://github.com/JiamingShi-JsPhys/chem-notes/releases/latest/download/General_Chemistry_en.pdf\">General_Chemistry_en.pdf</a></li>\n<li><a href=\"https://github.com/JiamingShi-JsPhys/chem-notes/releases/latest/download/General_Chemistry_zh.pdf\">General_Chemistry_zh.pdf</a></li>\n</ul>\n<p>Or visit the <a href=\"https://github.com/JiamingShi-JsPhys/chem-notes/releases/latest\">latest Releases</a>.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chem-notes-compilation\">Compilation</h2>\n<p>Main documents:</p>\n<pre><code class=\"language-text\">General_Chemistry_en.tex\nGeneral_Chemistry_zh.tex\n</code></pre>\n<p>Compile the English version:</p>\n<pre><code class=\"language-bash\">latexmk -xelatex -interaction=nonstopmode -file-line-error \\\n  -output-directory=build General_Chemistry_en.tex\n</code></pre>\n<p>To compile the Chinese version, replace the filename with <code>General_Chemistry_zh.tex</code>. All build artifacts are written to <code>build/</code>.</p>\n<p>The Chinese version uses the <code>chinese</code> class option:</p>\n<pre><code class=\"language-latex\">\\documentclass[chinese]{chemistry}\n</code></pre>\n<p>This loads <code>ctexart</code> and switches environment names to Chinese. The English version uses:</p>\n<pre><code class=\"language-latex\">\\documentclass{chemistry}\n</code></pre>\n<h2 id=\"readme-jiamingshi-jsphys-chem-notes-directory-structure\">Directory Structure</h2>\n<pre><code class=\"language-text\">chem-notes/\n├── General_Chemistry_en.tex\n├── General_Chemistry_zh.tex\n├── chemistry.cls\n├── chapters_en/\n├── chapters_zh/\n├── build/\n├── README.md\n└── README_zh.md\n</code></pre>\n<ul>\n<li><code>chemistry.cls</code>: shared document class containing the page layout, packages, fonts, theorem boxes, and custom macros.</li>\n<li><code>General_Chemistry_en.tex</code> / <code>General_Chemistry_zh.tex</code>: entry points for the English / Chinese versions.</li>\n<li><code>chapters_en/</code> / <code>chapters_zh/</code>: chapter source files for the English / Chinese versions.</li>\n<li><code>build/</code>: build artifacts, excluded from Git.</li>\n</ul>\n<h2 id=\"readme-jiamingshi-jsphys-chem-notes-current-status\">Current Status</h2>\n<p>Chapters 1–3 are complete; Chapters 4–7 are in progress. The shared preamble lives in <code>chemistry.cls</code>, and each chapter contains only <code>\\section</code>-level content. To add notes, create a new file in <code>chapters_en/</code> or <code>chapters_zh/</code> and add an <code>\\input</code> line to the corresponding main file.</p>\n<h2 id=\"readme-jiamingshi-jsphys-chem-notes-reporting-issues\">Reporting Issues</h2>\n<p>If you find a typo, a wrong equation, or a build issue, please open an issue and include the subject, page/section, and the exact line.</p>\n<ul>\n<li><strong>Repository:</strong> <a href=\"https://github.com/JiamingShi-JsPhys/chem-notes\">JiamingShi-JsPhys/chem-notes</a></li>\n<li><strong>Issues:</strong> <a href=\"https://github.com/JiamingShi-JsPhys/chem-notes/issues\">JiamingShi-JsPhys/chem-notes/issues</a></li>\n</ul>",
+      "toc": [
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-general-chemistry--notes",
+          "value": "General Chemistry — Notes",
+          "level": 1
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-compiled-pdfs",
+          "value": "Compiled PDFs",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-compilation",
+          "value": "Compilation",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-directory-structure",
+          "value": "Directory Structure",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-current-status",
+          "value": "Current Status",
+          "level": 2
+        },
+        {
+          "id": "readme-jiamingshi-jsphys-chem-notes-reporting-issues",
+          "value": "Reporting Issues",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/JiamingShi-JsPhys/chem-notes/blob/main/README.md",
+      "path": "README.md",
+      "sha": "e5aa330be35b1731c07779eedf7dccd31ab27a37",
+      "syncedAt": "2026-10-25T07:42:09.515Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:09.825Z"
+        },
+        "license": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:09.825Z"
+        }
+      }
+    },
+    "jietexue/quantum-mechanics-notes": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-jietexue-quantum-mechanics-notes-quantum-mechanics-notes---fall-2025\">Quantum Mechanics Notes - Fall 2025</h1>\n<p>Personal study notes for the Fall 2025 Quantum Mechanics course at Westlake University, taught by <strong>Congjun Wu</strong>. The notes are written primarily in English using LaTeX.</p>\n<p>Instructor's lecture notes: <a href=\"https://wucj.lab.westlake.edu.cn/teach/QuantumMechanics2025/QuantumMechanics2025.html\">Quantum Mechanics 2025</a>.</p>\n<p><strong>These notes do not follow the order of the lectures.</strong> Topics, derivations, and computational methods are reorganized around my own understanding, with a strongly personal approach to selection, presentation, and emphasis. They are not official lecture notes or a complete record of the course, and may contain errors or omissions.</p>\n<h2 id=\"readme-jietexue-quantum-mechanics-notes-contents\">Contents</h2>\n<ul>\n<li><strong>Foundations:</strong> quantization, Dirac notation, operators, commutators, compatible observables, and uncertainty relations.</li>\n<li><strong>Wave functions and dynamics:</strong> position and momentum representations, the Schrodinger equation, probability density and current, exponential operators, and the Baker-Hausdorff lemma.</li>\n<li><strong>Model systems:</strong> analytical and algebraic treatments of the harmonic oscillator, coherent states, gauge transformations, Landau levels, and the quantum Hall effect.</li>\n<li><strong>Angular momentum and symmetries:</strong> rotations, spherical harmonics, angular momentum addition, Clebsch-Gordan coefficients, parity, and time reversal.</li>\n<li><strong>Approximation methods:</strong> time-independent and time-dependent perturbation theory, the interaction picture, the Landau-Zener model, adiabatic evolution, and the Berry phase.</li>\n<li><strong>Path integrals and scattering:</strong> propagators, Feynman's path integral formulation, and partial-wave scattering.</li>\n</ul>\n<h2 id=\"readme-jietexue-quantum-mechanics-notes-build\">Build</h2>\n<p>The main source is <code>quantum-mechanics-notes.tex</code>; illustrations and their SVG source are in <code>figures/</code>.</p>\n<p>With a TeX distribution containing the required packages and <code>latexmk</code> installed, run from the repository root:</p>\n<pre><code class=\"language-sh\">latexmk -pdf quantum-mechanics-notes.tex\n</code></pre>",
+      "toc": [
+        {
+          "id": "readme-jietexue-quantum-mechanics-notes-quantum-mechanics-notes---fall-2025",
+          "value": "Quantum Mechanics Notes - Fall 2025",
+          "level": 1
+        },
+        {
+          "id": "readme-jietexue-quantum-mechanics-notes-contents",
+          "value": "Contents",
+          "level": 2
+        },
+        {
+          "id": "readme-jietexue-quantum-mechanics-notes-build",
+          "value": "Build",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/JieteXue/quantum-mechanics-notes/blob/main/README.md",
+      "path": "README.md",
+      "sha": "bd39ecbadedbc4910713c50cc1b336e7c1680670",
+      "syncedAt": "2026-10-25T07:42:09.951Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:09.815Z"
+        },
+        "license": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:09.815Z"
+        }
+      }
+    },
+    "qwerasdasd1/calculus-notes": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-qwerasdasd1-calculus-notes-calculus-lecture-notes--微积分讲义\">Calculus Lecture Notes / 微积分讲义</h1>\n<p><strong>2025 Calculus Track A (Fall &#x26; Spring) / 2025 学年微积分 A 类（上、下）</strong></p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-overview--概述\">Overview / 概述</h2>\n<p>This repository contains the lecture notes for <strong>Calculus Track A</strong> (both semesters), delivered by <strong>Prof. Yabin Zhang (张雅彬)</strong> at the 2025 academic year. The notes have been compiled and uploaded with the explicit permission of the instructor.</p>\n<p>本仓库为 <strong>2025 学年微积分 A 类（上、下）课程讲义</strong>，由 <strong>张雅彬</strong> 老师授课。讲义经授课教师明确同意后整理上传。</p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-chapter-outline--章节目录\">Chapter Outline / 章节目录</h2>\n<h3 id=\"readme-qwerasdasd1-calculus-notes-single-variable-calculus--单变量微积分上\">Single-Variable Calculus / 单变量微积分（上）</h3>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Ch.</th><th>English</th><th>中文</th></tr></thead><tbody><tr><td>01</td><td>Preparations: Ten Axioms</td><td>预备知识：十大公理</td></tr><tr><td>02</td><td>Integral Calculus</td><td>积分学</td></tr><tr><td>03</td><td>Applications of Integration</td><td>积分的应用</td></tr><tr><td>04</td><td>Limits and Continuity of Functions</td><td>函数的极限与连续性</td></tr><tr><td>05</td><td>Differential Calculus</td><td>微分学</td></tr><tr><td>06</td><td>Integration and Differentiation</td><td>积分与微分的联系</td></tr><tr><td>07</td><td>Transcendental Functions</td><td>超越函数</td></tr><tr><td>08</td><td>Polynomial Approximations to Functions</td><td>函数的多项式逼近</td></tr><tr><td>09</td><td>Sequences and Series</td><td>数列与级数</td></tr></tbody></table>\n<h3 id=\"readme-qwerasdasd1-calculus-notes-multivariable-calculus--多变量微积分下\">Multivariable Calculus / 多变量微积分（下）</h3>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Ch.</th><th>English</th><th>中文</th></tr></thead><tbody><tr><td>10</td><td>Vector Algebra and Analytic Geometry</td><td>向量代数与解析几何</td></tr><tr><td>11</td><td>Multivariable Calculus</td><td>多元微积分</td></tr><tr><td>12</td><td>Differential Calculus of Scalar and Vector Fields</td><td>标量与向量场的微分学</td></tr><tr><td>13</td><td>Applications of Differential Calculus</td><td>微分学的应用</td></tr><tr><td>14</td><td>Line Integrals</td><td>线积分</td></tr><tr><td>15</td><td>Multiple Integrals</td><td>多重积分</td></tr><tr><td>16</td><td>Surface Integrals</td><td>曲面积分</td></tr></tbody></table>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-textbook-and-references--教材与参考资料\">Textbook and References / 教材与参考资料</h2>\n<ul>\n<li><strong>Primary Textbook / 主要教材</strong><br>\nTom M. Apostol, <em>Calculus, Volume I</em> (2nd edition) and <em>Calculus, Volume II</em> (2nd edition).<br>\n本课程以 Tom M. Apostol 所著《Calculus》第一卷与第二卷（第二版）为主要教材。</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-who-should-use-these-notes--适用人群\">Who Should Use These Notes / 适用人群</h2>\n<ul>\n<li>\n<p><strong>Pre-study / 课前预习</strong><br>\nIf you have not yet taken the course and wish to prepare in advance, these notes can serve as a structured preview of the material and its scope.<br>\n若您尚未修读本课程并希望提前预习，本讲义可作为课程内容与范围的结构化预览。</p>\n</li>\n<li>\n<p><strong>Review / 课后复习</strong><br>\nIf you have already taken the course and wish to consolidate your understanding or revisit specific topics, these notes provide a reorganized and annotated reference.<br>\n若您已修读本课程，希望巩固理解或回顾特定知识点，本讲义可作为经过重排与注解的参考资料。</p>\n</li>\n<li>\n<p><strong>Exam Scope Reference (Credit Exemption) / 免修考试范围参考</strong><br>\nIf you have previously self-studied calculus and intend to sit for a credit exemption exam, these notes can help you gauge the breadth and depth of the course coverage. However, please note that the exam syllabus may vary slightly from year to year.<br>\n若您已自学过微积分并希望参加免修考试，本讲义可帮助您了解课程的覆盖范围与深度。但请注意，每年考纲可能略有变动。</p>\n</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-who-should-not-use-these-notes--不适用人群\">Who Should NOT Use These Notes / 不适用人群</h2>\n<ul>\n<li><strong>First-Time Self-Learners / 首次自学微积分者</strong><br>\nThese notes were not designed as a standalone textbook. They assume the presence of an instructor and are intended to complement, rather than replace, classroom instruction. Readers encountering calculus for the first time are strongly advised to use a comprehensive textbook alongside these materials.<br>\n本讲义并非为独立学习而设计。讲义假定读者有授课教师指导，旨在补充而非替代课堂教学。强烈建议首次接触微积分的读者在参考本讲义的同时，系统使用一本完整的教材。</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-how-these-notes-were-created--讲义的创作过程\">How These Notes Were Created / 讲义的创作过程</h2>\n<p>These notes were compiled through the following process:</p>\n<ol>\n<li><strong>Board note transcription / 板书整理</strong> — The core content is based on Prof. Zhang's lecture board work. It has been reorganized and typeset, with some statements rephrased in equivalent form and supplemented by minor explanatory adjustments where appropriate.</li>\n<li><strong>Motivational context and remarks / 动机阐释与评注</strong> — The author has added their own commentary to provide motivation, intuitive explanations, and supplementary remarks where deemed helpful.</li>\n<li><strong>Restructuring and pruning / 重排与删节</strong> — The material has undergone a degree of rearrangement to improve logical flow, and overly trivial examples have been removed to keep the notes concise.</li>\n<li><strong>Supplementary content / 补充内容</strong> — Material from exercise sessions (习题课) and homework assignments has been incorporated to enrich the treatment of certain topics.</li>\n</ol>\n<p>In summary, these notes are <strong>not</strong> a verbatim transcript of lectures; they are a curated and augmented version, shaped by the author's own perspective on the subject.</p>\n<p>本讲义的创作过程如下：</p>\n<ol>\n<li><strong>板书整理</strong> — 核心内容基于张老师的课堂板书整理而成。笔记在整理与排版过程中对部分表述进行了等价改写，并在适当位置加入了少量解释性补充;</li>\n<li><strong>动机阐释与评注</strong> — 作者适当加入了自身的理解与评注，以提供学习动机和直观解释；</li>\n<li><strong>重排与删节</strong> — 对内容进行了一定程度的重排以优化逻辑脉络，并删去了部分过于简单的例题；</li>\n<li><strong>补充内容</strong> — 结合习题课与课后作业内容，对相关知识点进行了补充。</li>\n</ol>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-disclaimer--注意事项\">Disclaimer / 注意事项</h2>\n<p>These notes may contain typographical or mathematical errors. If you spot any, please feel free to <a href=\"https://github.com/qwerasdasd1/Calculus-notes/issues\">open an issue</a> in this repository. Contributions and corrections are welcome.</p>\n<p>本讲义可能存在排版错误或数学笔误。如您发现任何问题，欢迎在本仓库<a href=\"https://github.com/qwerasdasd1/Calculus-notes/issues\">提交 Issue</a>。感谢您的反馈与指正。</p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-calculus-notes-license--许可\">License / 许可</h2>\n<p>The lecture content is based on Prof. Yabin Zhang's lectures and is shared with the instructor's consent. Please do not redistribute these notes for commercial purposes without permission.</p>\n<p>讲义内容基于张雅彬老师的授课内容，已获得授课教师的分享许可。请勿在未经许可的情况下将这些笔记用于商业目的。</p>",
+      "toc": [
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-calculus-lecture-notes--微积分讲义",
+          "value": "Calculus Lecture Notes / 微积分讲义",
+          "level": 1
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-overview--概述",
+          "value": "Overview / 概述",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-chapter-outline--章节目录",
+          "value": "Chapter Outline / 章节目录",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-single-variable-calculus--单变量微积分上",
+          "value": "Single-Variable Calculus / 单变量微积分（上）",
+          "level": 3
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-multivariable-calculus--多变量微积分下",
+          "value": "Multivariable Calculus / 多变量微积分（下）",
+          "level": 3
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-textbook-and-references--教材与参考资料",
+          "value": "Textbook and References / 教材与参考资料",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-who-should-use-these-notes--适用人群",
+          "value": "Who Should Use These Notes / 适用人群",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-who-should-not-use-these-notes--不适用人群",
+          "value": "Who Should NOT Use These Notes / 不适用人群",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-how-these-notes-were-created--讲义的创作过程",
+          "value": "How These Notes Were Created / 讲义的创作过程",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-disclaimer--注意事项",
+          "value": "Disclaimer / 注意事项",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-calculus-notes-license--许可",
+          "value": "License / 许可",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/qwerasdasd1/Calculus-notes/blob/main/README.md",
+      "path": "README.md",
+      "sha": "b3d384715a6f522edac2c4c269238133731742f8",
+      "syncedAt": "2026-10-25T07:42:10.262Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.233Z"
+        },
+        "license": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.233Z"
+        }
+      }
+    },
+    "qwerasdasd1/linear-algebra-notes": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-qwerasdasd1-linear-algebra-notes-linear-algebra-lecture-notes--线性代数讲义\">Linear Algebra Lecture Notes / 线性代数讲义</h1>\n<p><strong>2025–2026 Linear Algebra Track A / 2025–2026 学年线性代数 A 类</strong></p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-overview--概述\">Overview / 概述</h2>\n<p>This repository contains the lecture notes for <strong>Linear Algebra Track A</strong>, delivered by <strong>Prof. Yabin Zhang (张雅彬)</strong> at the 2025–2026 academic year. The notes have been compiled and uploaded with the explicit permission of the instructor.</p>\n<p>本仓库为 <strong>2025–2026 学年线性代数 A 类课程讲义</strong>，由 <strong>张雅彬</strong> 老师授课。讲义经授课教师明确同意后整理上传。</p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-chapter-outline--章节目录\">Chapter Outline / 章节目录</h2>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Ch.</th><th>English</th><th>中文</th></tr></thead><tbody><tr><td>01</td><td>Vector Spaces</td><td>向量空间</td></tr><tr><td>02</td><td>Matrices</td><td>矩阵</td></tr><tr><td>03</td><td>Linear Mappings</td><td>线性映射</td></tr><tr><td>04</td><td>Linear Maps and Matrices</td><td>线性映射与矩阵</td></tr><tr><td>05</td><td>Scalar Products and Orthogonality</td><td>标量积与正交性</td></tr><tr><td>06</td><td>Symmetric, Hermitian and Unitary Operators</td><td>对称、厄米与酉算子</td></tr><tr><td>07</td><td>Eigenvectors and Eigenvalues</td><td>特征向量与特征值</td></tr><tr><td>08</td><td>Triangulation and Jordan Form</td><td>三角化与若尔当标准型</td></tr><tr><td>09</td><td>Chinese–English Glossary</td><td>中英术语对照表</td></tr></tbody></table>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-textbook-and-references--教材与参考资料\">Textbook and References / 教材与参考资料</h2>\n<ul>\n<li><strong>Primary Textbook / 主要教材</strong><br>\nSerge Lang, <em>Linear Algebra</em> (3rd edition).<br>\n本课程以 Serge Lang 所著《Linear Algebra》（第三版）为主要教材。</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-who-should-use-these-notes--适用人群\">Who Should Use These Notes / 适用人群</h2>\n<ul>\n<li>\n<p><strong>Pre-study / 课前预习</strong><br>\nIf you have not yet taken the course and wish to prepare in advance, these notes can serve as a structured preview of the material and its scope.<br>\n若您尚未修读本课程并希望提前预习，本讲义可作为课程内容与范围的结构化预览。</p>\n</li>\n<li>\n<p><strong>Review / 课后复习</strong><br>\nIf you have already taken the course and wish to consolidate your understanding or revisit specific topics, these notes provide a reorganized and annotated reference.<br>\n若您已修读本课程，希望巩固理解或回顾特定知识点，本讲义可作为经过重排与注解的参考资料。</p>\n</li>\n<li>\n<p><strong>Exam Scope Reference (Credit Exemption) / 免修考试范围参考</strong><br>\nIf you have previously self-studied linear algebra and intend to sit for a credit exemption exam, these notes can help you gauge the breadth and depth of the course coverage. However, please note that the exam syllabus may vary slightly from year to year.<br>\n若您已自学过线性代数并希望参加免修考试，本讲义可帮助您了解课程的覆盖范围与深度。但请注意，每年考纲可能略有变动。</p>\n</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-who-should-not-use-these-notes--不适用人群\">Who Should NOT Use These Notes / 不适用人群</h2>\n<ul>\n<li><strong>First-Time Self-Learners / 首次自学线性代数者</strong><br>\nThese notes were not designed as a standalone textbook. They assume the presence of an instructor and are intended to complement, rather than replace, classroom instruction. Readers encountering linear algebra for the first time are strongly advised to use a comprehensive textbook alongside these materials.<br>\n本讲义并非为独立学习而设计。讲义假定读者有授课教师指导，旨在补充而非替代课堂教学。强烈建议首次接触线性代数的读者在参考本讲义的同时，系统使用一本完整的教材。</li>\n</ul>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-how-these-notes-were-created--讲义的创作过程\">How These Notes Were Created / 讲义的创作过程</h2>\n<p>These notes were compiled through the following process:</p>\n<ol>\n<li><strong>Board note transcription / 板书整理</strong> — The core content is based on Prof. Zhang's lecture board work. It has been reorganized and typeset, with some statements rephrased in equivalent form and supplemented by minor explanatory adjustments where appropriate.</li>\n<li><strong>Motivational context and remarks / 动机阐释与评注</strong> — The author has added their own commentary to provide motivation, intuitive explanations, and supplementary remarks where deemed helpful.</li>\n<li><strong>Restructuring and pruning / 重排与删节</strong> — The material has undergone a degree of rearrangement to improve logical flow, and overly trivial examples have been removed to keep the notes concise.</li>\n<li><strong>Supplementary content / 补充内容</strong> — Material from exercise sessions (习题课) and homework assignments has been incorporated to enrich the treatment of certain topics.</li>\n</ol>\n<p>In summary, these notes are <strong>not</strong> a verbatim transcript of lectures; they are a curated and augmented version, shaped by the author's own perspective on the subject.</p>\n<p>本讲义的创作过程如下：</p>\n<ol>\n<li><strong>板书整理</strong> — 核心内容基于张老师的课堂板书整理而成。笔记在整理与排版过程中对部分表述进行了等价改写，并在适当位置加入了少量解释性补充;</li>\n<li><strong>动机阐释与评注</strong> — 作者适当加入了自身的理解与评注，以提供学习动机和直观解释；</li>\n<li><strong>重排与删节</strong> — 对内容进行了一定程度的重排以优化逻辑脉络，并删去了部分过于简单的例题；</li>\n<li><strong>补充内容</strong> — 结合习题课与课后作业内容，对相关知识点进行了补充。</li>\n</ol>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-disclaimer--注意事项\">Disclaimer / 注意事项</h2>\n<p>These notes may contain typographical or mathematical errors. If you spot any, please feel free to <a href=\"https://github.com/qwerasdasd1/Linear-Algebra-notes/issues\">open an issue</a> in this repository. Contributions and corrections are welcome.</p>\n<p>本讲义可能存在排版错误或数学笔误。如您发现任何问题，欢迎在本仓库<a href=\"https://github.com/qwerasdasd1/Linear-Algebra-notes/issues\">提交 Issue</a>。感谢您的反馈与指正。</p>\n<hr>\n<h2 id=\"readme-qwerasdasd1-linear-algebra-notes-license--许可\">License / 许可</h2>\n<p>The lecture content is based on Prof. Yabin Zhang's lectures and is shared with the instructor's consent. Please do not redistribute these notes for commercial purposes without permission.</p>\n<p>讲义内容基于张雅彬老师的授课内容，已获得授课教师的分享许可。请勿在未经许可的情况下将这些笔记用于商业目的。</p>",
+      "toc": [
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-linear-algebra-lecture-notes--线性代数讲义",
+          "value": "Linear Algebra Lecture Notes / 线性代数讲义",
+          "level": 1
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-overview--概述",
+          "value": "Overview / 概述",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-chapter-outline--章节目录",
+          "value": "Chapter Outline / 章节目录",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-textbook-and-references--教材与参考资料",
+          "value": "Textbook and References / 教材与参考资料",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-who-should-use-these-notes--适用人群",
+          "value": "Who Should Use These Notes / 适用人群",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-who-should-not-use-these-notes--不适用人群",
+          "value": "Who Should NOT Use These Notes / 不适用人群",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-how-these-notes-were-created--讲义的创作过程",
+          "value": "How These Notes Were Created / 讲义的创作过程",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-disclaimer--注意事项",
+          "value": "Disclaimer / 注意事项",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-linear-algebra-notes-license--许可",
+          "value": "License / 许可",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/qwerasdasd1/Linear-Algebra-notes/blob/main/README.md",
+      "path": "README.md",
+      "sha": "533eec218b1b6a8eee732d3e02662c48147cb7e2",
+      "syncedAt": "2026-10-25T07:42:10.458Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.400Z"
+        },
+        "license": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.400Z"
+        }
+      }
+    },
+    "qwerasdasd1/pde-notes": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-qwerasdasd1-pde-notes-partial-differential-equations-notes--偏微分方程笔记\">Partial Differential Equations Notes / 偏微分方程笔记</h1>\n<p><strong>Course taught by Prof. Alexey Cheskidov at Westlake University; notes compiled by Sida Wu / 西湖大学 Alexey Cheskidov 教授授课，Sida Wu 整理</strong></p>\n<p><a href=\"https://github.com/qwerasdasd1/PDE-notes/blob/main/main.pdf\">Read the PDF / 阅读 PDF</a></p>\n<h2 id=\"readme-qwerasdasd1-pde-notes-overview--概述\">Overview / 概述</h2>\n<p>This repository contains an evolving set of notes for the Partial Differential Equations course taught by <a href=\"https://its.westlake.edu.cn/info/1108/1925.htm\">Prof. Alexey Cheskidov</a> at Westlake University. The current material covers selected topics in fluid dynamics and the one-dimensional heat equation, with derivations, examples, and explanatory remarks.</p>\n<p>本仓库收录西湖大学 <a href=\"https://its.westlake.edu.cn/info/1108/1925.htm\">Alexey Cheskidov 教授</a>所授偏微分方程课程的笔记，内容仍在持续整理。目前包含流体力学与一维热方程的部分内容，以及相关推导、例题和说明。</p>\n<h2 id=\"readme-qwerasdasd1-pde-notes-course-textbook--课程教材\">Course Textbook / 课程教材</h2>\n<p>The course syllabus lists Richard Haberman, <em>Applied Partial Differential Equations with Fourier Series and Boundary Value Problems</em>, 5th edition, as the textbook. See the <a href=\"https://www.pearson.com/en-gb/subject-catalog/p/applied-partial-differential-equations-with-fourier-series-and-boundary-value-problems-pearson-new-international-edition/P200000004362?view=educator\">publisher's book page</a>.</p>\n<p>课程大纲指定教材为 Richard Haberman 的 <em>Applied Partial Differential Equations with Fourier Series and Boundary Value Problems</em>，第 5 版。</p>\n<h2 id=\"readme-qwerasdasd1-pde-notes-current-contents--当前内容\">Current Contents / 当前内容</h2>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Part</th><th>English</th><th>中文</th></tr></thead><tbody><tr><td>1</td><td>Fluid dynamics</td><td>流体力学</td></tr><tr><td>1.1</td><td>Inviscid Burgers' equation, characteristics, and shock formation</td><td>无黏 Burgers 方程、特征线与激波形成</td></tr><tr><td>1.2</td><td>The incompressible Navier-Stokes equations</td><td>不可压缩 Navier-Stokes 方程</td></tr><tr><td>1.3</td><td>Kinetic energy and its evolution</td><td>动能及其演化</td></tr><tr><td>1.4</td><td>Evolution of the velocity gradient and enstrophy</td><td>速度梯度的演化与涡量平方积分</td></tr><tr><td>2</td><td>The one-dimensional heat equation</td><td>一维热方程</td></tr><tr><td>2.1</td><td>Stationary solutions and homogeneous boundary conditions</td><td>稳态解与边界条件齐次化</td></tr><tr><td>2.2</td><td>Separation of variables and Fourier sine series</td><td>分离变量法与 Fourier 正弦级数</td></tr><tr><td>2.3</td><td>Other boundary conditions and introductory Fourier series material</td><td>其他边界条件与 Fourier 级数初步</td></tr></tbody></table>\n<h2 id=\"readme-qwerasdasd1-pde-notes-files--文件说明\">Files / 文件说明</h2>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>File</th><th>Description / 说明</th></tr></thead><tbody><tr><td><a href=\"https://github.com/qwerasdasd1/PDE-notes/blob/main/main.pdf\">main.pdf</a></td><td>Compiled notes / 编译后的讲义</td></tr><tr><td><a href=\"https://github.com/qwerasdasd1/PDE-notes/blob/main/main.tex\">main.tex</a></td><td>Main LaTeX source / LaTeX 主文件</td></tr><tr><td><a href=\"https://github.com/qwerasdasd1/PDE-notes/blob/main/mynotes.cls\">mynotes.cls</a></td><td>Local document class / 本地文档样式</td></tr></tbody></table>\n<h2 id=\"readme-qwerasdasd1-pde-notes-reading-guide--阅读建议\">Reading Guide / 阅读建议</h2>\n<p>These notes are intended for course review and topic-based reference. Familiarity with multivariable calculus, linear algebra, and ordinary differential equations will be helpful. For a first systematic study of PDEs, use them alongside a textbook or a course.</p>\n<p>本笔记适合课后复习与按主题查阅，阅读时需要多元微积分、线性代数和常微分方程的基础。首次系统学习偏微分方程时，建议结合教材或课程使用。</p>\n<h2 id=\"readme-qwerasdasd1-pde-notes-build--编译\">Build / 编译</h2>\n<p>Use a TeX distribution with CTeX and the packages required by <code>mynotes.cls</code>. The build is checked with TeX Live 2025 and XeLaTeX.</p>\n<p>使用包含 CTeX 及 <code>mynotes.cls</code> 所需宏包的 TeX 环境。编译使用 TeX Live 2025 与 XeLaTeX 验证。</p>\n<p>From the repository root / 在仓库根目录运行：</p>\n<pre><code class=\"language-sh\">latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex\n</code></pre>\n<p>If <code>latexmk</code> is unavailable, run XeLaTeX twice / 若未安装 <code>latexmk</code>，可运行两遍 XeLaTeX：</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error main.tex\nxelatex -interaction=nonstopmode -halt-on-error main.tex\n</code></pre>\n<p>The output is <code>main.pdf</code>.</p>\n<p>输出文件为 <code>main.pdf</code>。</p>\n<h2 id=\"readme-qwerasdasd1-pde-notes-corrections--勘误\">Corrections / 勘误</h2>\n<p>Corrections to mathematical statements, notation, and typesetting are welcome. Please <a href=\"https://github.com/qwerasdasd1/PDE-notes/issues\">open an issue</a> and identify the relevant section or page.</p>\n<p>欢迎指出数学表述、符号和排版中的问题。请在本仓库<a href=\"https://github.com/qwerasdasd1/PDE-notes/issues\">提交 Issue</a>，并注明对应章节或页码。</p>",
+      "toc": [
+        {
+          "id": "readme-qwerasdasd1-pde-notes-partial-differential-equations-notes--偏微分方程笔记",
+          "value": "Partial Differential Equations Notes / 偏微分方程笔记",
+          "level": 1
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-overview--概述",
+          "value": "Overview / 概述",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-course-textbook--课程教材",
+          "value": "Course Textbook / 课程教材",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-current-contents--当前内容",
+          "value": "Current Contents / 当前内容",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-files--文件说明",
+          "value": "Files / 文件说明",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-reading-guide--阅读建议",
+          "value": "Reading Guide / 阅读建议",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-build--编译",
+          "value": "Build / 编译",
+          "level": 2
+        },
+        {
+          "id": "readme-qwerasdasd1-pde-notes-corrections--勘误",
+          "value": "Corrections / 勘误",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/qwerasdasd1/PDE-notes/blob/main/README.md",
+      "path": "README.md",
+      "sha": "8fc7f65f62927d522cb5ecac2f3a6d9cd099d7b3",
+      "syncedAt": "2026-10-25T07:42:10.735Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.661Z"
+        },
+        "license": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.661Z"
+        }
+      }
+    },
+    "westlake-noter/faa-lecture-notes-2025fall-2026spring": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis\">Fundamental Algebra and Analysis</h1>\n<p>This repository archives the source files for the <strong>Fundamental Algebra and Analysis</strong> course notes.</p>\n<p>Course edition: <strong>2025 Fall–2026 Spring</strong> (<code>2025fall</code>, <code>2026spring</code>).\nRepository: <code>FAA-lecture-notes-2025fall-2026spring</code>.</p>\n<p>As of June 24, 2026, all course sessions have ended. The repository is kept mainly as an archive of the LaTeX sources for the two parts of the course:</p>\n<ul>\n<li><code>faa-notes.cls</code>: shared document class, based on <code>book</code></li>\n<li><code>part-1.tex</code>, <code>part-2.tex</code>: entry points for the two lecture-note volumes</li>\n<li><code>part-1/chapters/</code>, <code>part-2/chapters/</code>: chapter sources</li>\n<li><code>part-1/thinking-and-method.tex</code>: supplementary notes</li>\n<li><code>release-notes.md</code>: release description draft</li>\n</ul>\n<p>Compiled PDFs, including exercises and other handouts when available, will be packaged and published through GitHub Releases. Please check the repository's Releases page for downloadable PDF bundles instead of expecting built PDFs to be committed directly to the source tree.</p>\n<p>Maintenance will be very infrequent. Future updates are expected only when someone reports a typo, correction, or small improvement and contributes it directly.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-building\">Building</h2>\n<p>Use a full TeX Live or MacTeX installation with XeLaTeX and <code>latexmk</code>.\nFrom the repository root, run:</p>\n<pre><code class=\"language-sh\">latexmk -xelatex -interaction=nonstopmode -halt-on-error part-1.tex\nlatexmk -xelatex -interaction=nonstopmode -halt-on-error part-2.tex\nlatexmk -cd -xelatex -interaction=nonstopmode -halt-on-error part-1/thinking-and-method.tex\n</code></pre>\n<p>The included <code>.latexmkrc</code> compiles with XeLaTeX in the source directory, keeps\nworking files (including <code>.aux</code>, <code>.log</code>, <code>.xdv</code>, and SyncTeX) in the repository's\n<code>build/</code> directory, and copies only the final PDF beside its <code>.tex</code> source:</p>\n<pre><code class=\"language-text\">part-1.tex                 -> part-1.pdf\npart-2.tex                 -> part-2.pdf\npart-1/thinking-and-method.tex -> part-1/thinking-and-method.pdf\n</code></pre>\n<p><code>build/</code> also retains working copies of the PDFs for incremental compilation.\nDo not pass <code>-outdir</code> or <code>-auxdir</code>, which override this configuration.\nBuild Part I before the supplementary notes, which read its <code>.aux</code> files from\n<code>build/</code> and link to <code>part-1.pdf</code>. PDFs and the entire <code>build/</code> directory are\nignored by Git. After changing or deleting a published PDF, run the corresponding\nbuild command again to refresh it.</p>\n<p>VS Code user-level recipes can apply the same layout globally using a <code>build/</code>\ndirectory beside each document entry point; the PDF preview and SyncTeX can use\nthe working PDF there while the published PDF stays beside the source.</p>\n<p>The lecture notes use <code>\\documentclass[part-one]{faa-notes}</code> or\n<code>\\documentclass[part-two]{faa-notes}</code>. The latter preserves Part II's extra\nmathematical operators, list packages, number-first theorem headings, and shared\naxiom counter. Standard <code>book</code> options, such as <code>oneside</code>, are forwarded.\nExisting mathematical commands and environment names remain compatible.\nSource paths use lowercase ASCII names with hyphens and two-digit chapter numbers;\nstandard repository files such as <code>README.md</code> and <code>LICENSE</code> retain their names.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-contributing\">Contributing</h2>\n<p>Typo fixes and small corrections are welcome. If you notice an error, please open an issue or submit a pull request with a focused change.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-license\">License</h2>\n<p>This repository is released under the MIT License. See <a href=\"https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a> for details.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-代数与分析基础\">代数与分析基础</h1>\n<p>这个仓库用于归档 <strong>代数与分析基础</strong> 课程讲义的源文件。</p>\n<p>课程版本：<strong>2025 年秋季至 2026 年春季</strong>（<code>2025fall</code>、<code>2026spring</code>）。\n仓库名称：<code>FAA-lecture-notes-2025fall-2026spring</code>。</p>\n<p>截至 2026 年 6 月 24 日，今天所有课程均已结束。本仓库主要作为两部分课程 LaTeX 源文件的归档：</p>\n<ul>\n<li><code>faa-notes.cls</code>：基于 <code>book</code> 的共享文档类</li>\n<li><code>part-1.tex</code>、<code>part-2.tex</code>：两部分讲义的编译入口</li>\n<li><code>part-1/chapters/</code>、<code>part-2/chapters/</code>：章节源文件</li>\n<li><code>part-1/thinking-and-method.tex</code>：补充笔记</li>\n<li><code>release-notes.md</code>：发布说明草稿</li>\n</ul>\n<p>编译后的 PDF，包括习题和其他讲义材料（如有），会打包发布在 GitHub Releases 中。请优先在本仓库的 Releases 页面下载 PDF 包，而不是期待编译后的 PDF 被直接提交到源代码目录中。</p>\n<p>之后本仓库的维护频率会非常低。预计只有在有人主动指出 typo、修正错误，或贡献小改进时，才会继续更新。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-编译\">编译</h2>\n<p>安装包含 XeLaTeX 和 <code>latexmk</code> 的完整 TeX Live 或 MacTeX，在仓库根目录运行上方命令。\n仓库内的 <code>.latexmkrc</code> 会将 <code>.aux</code>、<code>.log</code>、<code>.xdv</code>、SyncTeX 等工作文件统一放到\n根目录的 <code>build/</code>，仅将最终 PDF 复制到对应 <code>.tex</code> 的同级目录，具体位置见上方示例。\n<code>build/</code> 中也会保留用于增量编译的 PDF 工作副本。不要额外传入 <code>-outdir</code> 或\n<code>-auxdir</code>，以免覆盖该配置。\n补充笔记会读取 <code>build/</code> 中第一部分的 <code>.aux</code> 文件并链接到 <code>part-1.pdf</code>，\n因此需先编译 <code>part-1.tex</code>。PDF 和整个 <code>build/</code> 不会提交到 Git。\n若修改或删除了同级目录的 PDF，重新运行相应编译命令即可更新。\nVS Code 全局编译配方也可采用相同布局，在各编译入口旁的 <code>build/</code> 中保存工作文件；\n预览和 SyncTeX 使用其中的 PDF 工作副本，同级目录保留最终 PDF。</p>\n<p>两部分分别使用 <code>\\documentclass[part-one]{faa-notes}</code> 和\n<code>\\documentclass[part-two]{faa-notes}</code>。第二部分保留原有的附加数学命令、\n列表宏包、编号在前的定理标题及共享的公理计数器，<code>oneside</code> 等标准 <code>book</code>\n选项会传递给基础类。正文中已有的数学命令和环境名保持兼容。\n源码路径统一使用小写英文、连字符和两位章节编号，<code>README.md</code>、<code>LICENSE</code>\n等标准仓库文件名保留。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-贡献\">贡献</h2>\n<p>欢迎提交 typo 修正和小范围勘误。如果你发现问题，可以开 issue，或者直接提交一个聚焦的 pull request。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-许可证\">许可证</h2>\n<p>本仓库采用 MIT License 发布。详情见 <a href=\"https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "toc": [
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis",
+          "value": "Fundamental Algebra and Analysis",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-building",
+          "value": "Building",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-contributing",
+          "value": "Contributing",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-license",
+          "value": "License",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-代数与分析基础",
+          "value": "代数与分析基础",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-编译",
+          "value": "编译",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-贡献",
+          "value": "贡献",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-许可证",
+          "value": "许可证",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/README.md",
+      "path": "README.md",
+      "sha": "1853367dec0b3ed9d031327ee796abdd2094f6da",
+      "syncedAt": "2026-10-25T07:42:10.904Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:10.856Z"
+        },
+        "license": {
+          "status": "ready",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 JieteXue</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "toc": [],
+          "sourceUrl": "https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE",
+          "path": "LICENSE",
+          "sha": "987697909c1582b6a9e30aed9dc6843645afbc34",
+          "syncedAt": "2026-10-25T07:42:11.211Z"
+        }
+      }
+    },
+    "westlake-noter/measure-theory-and-real-analysis": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-westlake-noter-measure-theory-and-real-analysis-measure-theory-and-real-analysis\">Measure Theory and Real Analysis</h1>\n<p>This repository contains the LaTeX source files for the <strong>Measure Theory and Real Analysis</strong> course notes.</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-noter. See <a href=\"https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-measure-theory-and-real-analysis-测度论与实分析\">测度论与实分析</h1>\n<p>本仓库整理和维护 <strong>测度论与实分析</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-noter，详见 <a href=\"https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "toc": [
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-measure-theory-and-real-analysis",
+          "value": "Measure Theory and Real Analysis",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-build",
+          "value": "Build",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-contributing",
+          "value": "Contributing",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-license",
+          "value": "License",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-测度论与实分析",
+          "value": "测度论与实分析",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-编译",
+          "value": "编译",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-贡献",
+          "value": "贡献",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-measure-theory-and-real-analysis-许可证",
+          "value": "许可证",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/README.md",
+      "path": "README.md",
+      "sha": "4cc46bdb971b990e48b2c6626fb8f2711091bd9a",
+      "syncedAt": "2026-10-25T07:42:11.185Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:11.170Z"
+        },
+        "license": {
+          "status": "ready",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "toc": [],
+          "sourceUrl": "https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE",
+          "path": "LICENSE",
+          "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
+          "syncedAt": "2026-10-25T07:42:11.529Z"
+        }
+      }
+    },
+    "westlake-noter/ordinary-differential-equations": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-westlake-noter-ordinary-differential-equations-ordinary-differential-equations\">Ordinary Differential Equations</h1>\n<p>This repository contains the LaTeX source files for the <strong>Ordinary Differential Equations</strong> course notes.</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-noter. See <a href=\"https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-ordinary-differential-equations-常微分方程\">常微分方程</h1>\n<p>本仓库整理和维护 <strong>常微分方程</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-noter，详见 <a href=\"https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "toc": [
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-ordinary-differential-equations",
+          "value": "Ordinary Differential Equations",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-build",
+          "value": "Build",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-contributing",
+          "value": "Contributing",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-license",
+          "value": "License",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-常微分方程",
+          "value": "常微分方程",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-编译",
+          "value": "编译",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-贡献",
+          "value": "贡献",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-ordinary-differential-equations-许可证",
+          "value": "许可证",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/README.md",
+      "path": "README.md",
+      "sha": "427afe14175afd95ee0ab3ef7db7b5bac5e89b27",
+      "syncedAt": "2026-10-25T07:42:11.682Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:11.625Z"
+        },
+        "license": {
+          "status": "ready",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "toc": [],
+          "sourceUrl": "https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE",
+          "path": "LICENSE",
+          "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
+          "syncedAt": "2026-10-25T07:42:12.044Z"
+        }
+      }
+    },
+    "westlake-noter/probability-theory": {
+      "status": "ready",
+      "html": "<h1 id=\"readme-westlake-noter-probability-theory-probability-theory\">Probability Theory</h1>\n<p>This repository contains the LaTeX source files for the <strong>Probability Theory</strong> course notes.</p>\n<p>The source files are organized as follows:</p>\n<ul>\n<li><code>Probability Theory.tex</code>: the main LaTeX document, including the document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<p>The repository will be updated as new notes or corrections become available.</p>\n<h2 id=\"readme-westlake-noter-probability-theory-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and improvements to explanations or typesetting are welcome.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-probability-theory-概率论\">概率论</h1>\n<p>本仓库用于整理和维护 <strong>概率论</strong> 课程笔记的 LaTeX 源文件。</p>\n<p>源文件按以下结构组织：</p>\n<ul>\n<li><code>Probability Theory.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<p>仓库将随新增笔记的整理及勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-probability-theory-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正，以及表述和排版方面的改进。</p>",
+      "toc": [
+        {
+          "id": "readme-westlake-noter-probability-theory-probability-theory",
+          "value": "Probability Theory",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-probability-theory-contributing",
+          "value": "Contributing",
+          "level": 2
+        },
+        {
+          "id": "readme-westlake-noter-probability-theory-概率论",
+          "value": "概率论",
+          "level": 1
+        },
+        {
+          "id": "readme-westlake-noter-probability-theory-贡献",
+          "value": "贡献",
+          "level": 2
+        }
+      ],
+      "sourceUrl": "https://github.com/westlake-noter/Probability-Theory/blob/main/README.md",
+      "path": "README.md",
+      "sha": "a426f629397fc9c610d4271c8562385202914c68",
+      "syncedAt": "2026-10-25T07:42:12.016Z",
+      "documents": {
+        "contributing": {
+          "status": "missing",
+          "syncedAt": "2026-10-25T07:42:11.955Z"
+        },
+        "license": {
+          "status": "ready",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "toc": [],
+          "sourceUrl": "https://github.com/westlake-noter/Probability-Theory/blob/main/LICENSE",
+          "path": "LICENSE",
+          "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
+          "syncedAt": "2026-10-25T07:42:12.308Z"
+        }
+      }
+    }
+  }
+}
