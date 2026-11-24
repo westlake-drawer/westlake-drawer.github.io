@@ -70,7 +70,7 @@ test('Quantum Mechanics TOC preserves all PDF topics, hierarchy, numbers, and pr
 });
 
 test('FAA renders both declared volumes in one TOC tab with a document selector', async () => {
-  const filePath = path.join(contentRoot, 'docs/notes/math/fundamental-algebra-analysis/2025-fall-2026-spring/westlake-noter/index.md');
+  const filePath = path.join(contentRoot, 'docs/notes/math/fundamental-algebra-analysis/2025-fall-2026-spring/westlake-drawer/index.md');
   const overview = await readFile(filePath, 'utf8');
   const {frontMatter} = await DEFAULT_PARSE_FRONT_MATTER({filePath, fileContent: overview});
   const declared = frontMatter.repositoryTabs.find(({id}) => id === 'toc');

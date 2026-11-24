@@ -14,7 +14,7 @@ import pdfPreviews from './plugins/pdf-previews.mjs';
 const sections = discoverDocSections();
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Westlake Noter',
+  title: 'Westlake Drawer',
   tagline: 'Course Notes Index',
   favicon: 'img/westlake-logo.svg',
   url: 'https://westlake-drawer.github.io',
@@ -82,9 +82,9 @@ const config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Westlake Noter',
+      title: 'Westlake Drawer',
       logo: {
-        alt: 'Westlake Noter',
+        alt: 'Westlake Drawer',
         src: 'img/westlake-logo.svg',
       },
       items: [
@@ -122,7 +122,7 @@ const config = {
           ],
         },
       ],
-      copyright: `Westlake Noter · ${new Date().getFullYear()}`,
+      copyright: `Westlake Drawer · ${new Date().getFullYear()}`,
     },
     prism: {
       theme: prismThemes.github,

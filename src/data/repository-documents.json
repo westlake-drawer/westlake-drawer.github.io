@@ -385,52 +385,52 @@
         }
       }
     },
-    "westlake-noter/faa-lecture-notes-2025fall-2026spring": {
+    "westlake-drawer/faa-lecture-notes-2025fall-2026spring": {
       "status": "ready",
-      "html": "<h1 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis\">Fundamental Algebra and Analysis</h1>\n<p>This repository archives the source files for the <strong>Fundamental Algebra and Analysis</strong> course notes.</p>\n<p>Course edition: <strong>2025 Fall–2026 Spring</strong> (<code>2025fall</code>, <code>2026spring</code>).\nRepository: <code>FAA-lecture-notes-2025fall-2026spring</code>.</p>\n<p>As of June 24, 2026, all course sessions have ended. The repository is kept mainly as an archive of the LaTeX sources for the two parts of the course:</p>\n<ul>\n<li><code>faa-notes.cls</code>: shared document class, based on <code>book</code></li>\n<li><code>part-1.tex</code>, <code>part-2.tex</code>: entry points for the two lecture-note volumes</li>\n<li><code>part-1/chapters/</code>, <code>part-2/chapters/</code>: chapter sources</li>\n<li><code>part-1/thinking-and-method.tex</code>: supplementary notes</li>\n<li><code>release-notes.md</code>: release description draft</li>\n</ul>\n<p>Compiled PDFs, including exercises and other handouts when available, will be packaged and published through GitHub Releases. Please check the repository's Releases page for downloadable PDF bundles instead of expecting built PDFs to be committed directly to the source tree.</p>\n<p>Maintenance will be very infrequent. Future updates are expected only when someone reports a typo, correction, or small improvement and contributes it directly.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-building\">Building</h2>\n<p>Use a full TeX Live or MacTeX installation with XeLaTeX and <code>latexmk</code>.\nFrom the repository root, run:</p>\n<pre><code class=\"language-sh\">latexmk -xelatex -interaction=nonstopmode -halt-on-error part-1.tex\nlatexmk -xelatex -interaction=nonstopmode -halt-on-error part-2.tex\nlatexmk -cd -xelatex -interaction=nonstopmode -halt-on-error part-1/thinking-and-method.tex\n</code></pre>\n<p>The included <code>.latexmkrc</code> compiles with XeLaTeX in the source directory, keeps\nworking files (including <code>.aux</code>, <code>.log</code>, <code>.xdv</code>, and SyncTeX) in the repository's\n<code>build/</code> directory, and copies only the final PDF beside its <code>.tex</code> source:</p>\n<pre><code class=\"language-text\">part-1.tex                 -> part-1.pdf\npart-2.tex                 -> part-2.pdf\npart-1/thinking-and-method.tex -> part-1/thinking-and-method.pdf\n</code></pre>\n<p><code>build/</code> also retains working copies of the PDFs for incremental compilation.\nDo not pass <code>-outdir</code> or <code>-auxdir</code>, which override this configuration.\nBuild Part I before the supplementary notes, which read its <code>.aux</code> files from\n<code>build/</code> and link to <code>part-1.pdf</code>. PDFs and the entire <code>build/</code> directory are\nignored by Git. After changing or deleting a published PDF, run the corresponding\nbuild command again to refresh it.</p>\n<p>VS Code user-level recipes can apply the same layout globally using a <code>build/</code>\ndirectory beside each document entry point; the PDF preview and SyncTeX can use\nthe working PDF there while the published PDF stays beside the source.</p>\n<p>The lecture notes use <code>\\documentclass[part-one]{faa-notes}</code> or\n<code>\\documentclass[part-two]{faa-notes}</code>. The latter preserves Part II's extra\nmathematical operators, list packages, number-first theorem headings, and shared\naxiom counter. Standard <code>book</code> options, such as <code>oneside</code>, are forwarded.\nExisting mathematical commands and environment names remain compatible.\nSource paths use lowercase ASCII names with hyphens and two-digit chapter numbers;\nstandard repository files such as <code>README.md</code> and <code>LICENSE</code> retain their names.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-contributing\">Contributing</h2>\n<p>Typo fixes and small corrections are welcome. If you notice an error, please open an issue or submit a pull request with a focused change.</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-license\">License</h2>\n<p>This repository is released under the MIT License. See <a href=\"https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a> for details.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-代数与分析基础\">代数与分析基础</h1>\n<p>这个仓库用于归档 <strong>代数与分析基础</strong> 课程讲义的源文件。</p>\n<p>课程版本：<strong>2025 年秋季至 2026 年春季</strong>（<code>2025fall</code>、<code>2026spring</code>）。\n仓库名称：<code>FAA-lecture-notes-2025fall-2026spring</code>。</p>\n<p>截至 2026 年 6 月 24 日，今天所有课程均已结束。本仓库主要作为两部分课程 LaTeX 源文件的归档：</p>\n<ul>\n<li><code>faa-notes.cls</code>：基于 <code>book</code> 的共享文档类</li>\n<li><code>part-1.tex</code>、<code>part-2.tex</code>：两部分讲义的编译入口</li>\n<li><code>part-1/chapters/</code>、<code>part-2/chapters/</code>：章节源文件</li>\n<li><code>part-1/thinking-and-method.tex</code>：补充笔记</li>\n<li><code>release-notes.md</code>：发布说明草稿</li>\n</ul>\n<p>编译后的 PDF，包括习题和其他讲义材料（如有），会打包发布在 GitHub Releases 中。请优先在本仓库的 Releases 页面下载 PDF 包，而不是期待编译后的 PDF 被直接提交到源代码目录中。</p>\n<p>之后本仓库的维护频率会非常低。预计只有在有人主动指出 typo、修正错误，或贡献小改进时，才会继续更新。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-编译\">编译</h2>\n<p>安装包含 XeLaTeX 和 <code>latexmk</code> 的完整 TeX Live 或 MacTeX，在仓库根目录运行上方命令。\n仓库内的 <code>.latexmkrc</code> 会将 <code>.aux</code>、<code>.log</code>、<code>.xdv</code>、SyncTeX 等工作文件统一放到\n根目录的 <code>build/</code>，仅将最终 PDF 复制到对应 <code>.tex</code> 的同级目录，具体位置见上方示例。\n<code>build/</code> 中也会保留用于增量编译的 PDF 工作副本。不要额外传入 <code>-outdir</code> 或\n<code>-auxdir</code>，以免覆盖该配置。\n补充笔记会读取 <code>build/</code> 中第一部分的 <code>.aux</code> 文件并链接到 <code>part-1.pdf</code>，\n因此需先编译 <code>part-1.tex</code>。PDF 和整个 <code>build/</code> 不会提交到 Git。\n若修改或删除了同级目录的 PDF，重新运行相应编译命令即可更新。\nVS Code 全局编译配方也可采用相同布局，在各编译入口旁的 <code>build/</code> 中保存工作文件；\n预览和 SyncTeX 使用其中的 PDF 工作副本，同级目录保留最终 PDF。</p>\n<p>两部分分别使用 <code>\\documentclass[part-one]{faa-notes}</code> 和\n<code>\\documentclass[part-two]{faa-notes}</code>。第二部分保留原有的附加数学命令、\n列表宏包、编号在前的定理标题及共享的公理计数器，<code>oneside</code> 等标准 <code>book</code>\n选项会传递给基础类。正文中已有的数学命令和环境名保持兼容。\n源码路径统一使用小写英文、连字符和两位章节编号，<code>README.md</code>、<code>LICENSE</code>\n等标准仓库文件名保留。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-贡献\">贡献</h2>\n<p>欢迎提交 typo 修正和小范围勘误。如果你发现问题，可以开 issue，或者直接提交一个聚焦的 pull request。</p>\n<h2 id=\"readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-许可证\">许可证</h2>\n<p>本仓库采用 MIT License 发布。详情见 <a href=\"https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "html": "<h1 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis\">Fundamental Algebra and Analysis</h1>\n<p>This repository archives the source files for the <strong>Fundamental Algebra and Analysis</strong> course notes.</p>\n<p>Course edition: <strong>2025 Fall–2026 Spring</strong> (<code>2025fall</code>, <code>2026spring</code>).\nRepository: <code>FAA-lecture-notes-2025fall-2026spring</code>.</p>\n<p>As of June 24, 2026, all course sessions have ended. The repository is kept mainly as an archive of the LaTeX sources for the two parts of the course:</p>\n<ul>\n<li><code>faa-notes.cls</code>: shared document class, based on <code>book</code></li>\n<li><code>part-1.tex</code>, <code>part-2.tex</code>: entry points for the two lecture-note volumes</li>\n<li><code>part-1/chapters/</code>, <code>part-2/chapters/</code>: chapter sources</li>\n<li><code>part-1/thinking-and-method.tex</code>: supplementary notes</li>\n<li><code>release-notes.md</code>: release description draft</li>\n</ul>\n<p>Compiled PDFs, including exercises and other handouts when available, will be packaged and published through GitHub Releases. Please check the repository's Releases page for downloadable PDF bundles instead of expecting built PDFs to be committed directly to the source tree.</p>\n<p>Maintenance will be very infrequent. Future updates are expected only when someone reports a typo, correction, or small improvement and contributes it directly.</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-building\">Building</h2>\n<p>Use a full TeX Live or MacTeX installation with XeLaTeX and <code>latexmk</code>.\nFrom the repository root, run:</p>\n<pre><code class=\"language-sh\">latexmk -xelatex -interaction=nonstopmode -halt-on-error part-1.tex\nlatexmk -xelatex -interaction=nonstopmode -halt-on-error part-2.tex\nlatexmk -cd -xelatex -interaction=nonstopmode -halt-on-error part-1/thinking-and-method.tex\n</code></pre>\n<p>The included <code>.latexmkrc</code> compiles with XeLaTeX in the source directory, keeps\nworking files (including <code>.aux</code>, <code>.log</code>, <code>.xdv</code>, and SyncTeX) in the repository's\n<code>build/</code> directory, and copies only the final PDF beside its <code>.tex</code> source:</p>\n<pre><code class=\"language-text\">part-1.tex                 -> part-1.pdf\npart-2.tex                 -> part-2.pdf\npart-1/thinking-and-method.tex -> part-1/thinking-and-method.pdf\n</code></pre>\n<p><code>build/</code> also retains working copies of the PDFs for incremental compilation.\nDo not pass <code>-outdir</code> or <code>-auxdir</code>, which override this configuration.\nBuild Part I before the supplementary notes, which read its <code>.aux</code> files from\n<code>build/</code> and link to <code>part-1.pdf</code>. PDFs and the entire <code>build/</code> directory are\nignored by Git. After changing or deleting a published PDF, run the corresponding\nbuild command again to refresh it.</p>\n<p>VS Code user-level recipes can apply the same layout globally using a <code>build/</code>\ndirectory beside each document entry point; the PDF preview and SyncTeX can use\nthe working PDF there while the published PDF stays beside the source.</p>\n<p>The lecture notes use <code>\\documentclass[part-one]{faa-notes}</code> or\n<code>\\documentclass[part-two]{faa-notes}</code>. The latter preserves Part II's extra\nmathematical operators, list packages, number-first theorem headings, and shared\naxiom counter. Standard <code>book</code> options, such as <code>oneside</code>, are forwarded.\nExisting mathematical commands and environment names remain compatible.\nSource paths use lowercase ASCII names with hyphens and two-digit chapter numbers;\nstandard repository files such as <code>README.md</code> and <code>LICENSE</code> retain their names.</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-contributing\">Contributing</h2>\n<p>Typo fixes and small corrections are welcome. If you notice an error, please open an issue or submit a pull request with a focused change.</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-license\">License</h2>\n<p>This repository is released under the MIT License. See <a href=\"https://github.com/westlake-drawer/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a> for details.</p>\n<hr>\n<h1 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-代数与分析基础\">代数与分析基础</h1>\n<p>这个仓库用于归档 <strong>代数与分析基础</strong> 课程讲义的源文件。</p>\n<p>课程版本：<strong>2025 年秋季至 2026 年春季</strong>（<code>2025fall</code>、<code>2026spring</code>）。\n仓库名称：<code>FAA-lecture-notes-2025fall-2026spring</code>。</p>\n<p>截至 2026 年 6 月 24 日，今天所有课程均已结束。本仓库主要作为两部分课程 LaTeX 源文件的归档：</p>\n<ul>\n<li><code>faa-notes.cls</code>：基于 <code>book</code> 的共享文档类</li>\n<li><code>part-1.tex</code>、<code>part-2.tex</code>：两部分讲义的编译入口</li>\n<li><code>part-1/chapters/</code>、<code>part-2/chapters/</code>：章节源文件</li>\n<li><code>part-1/thinking-and-method.tex</code>：补充笔记</li>\n<li><code>release-notes.md</code>：发布说明草稿</li>\n</ul>\n<p>编译后的 PDF，包括习题和其他讲义材料（如有），会打包发布在 GitHub Releases 中。请优先在本仓库的 Releases 页面下载 PDF 包，而不是期待编译后的 PDF 被直接提交到源代码目录中。</p>\n<p>之后本仓库的维护频率会非常低。预计只有在有人主动指出 typo、修正错误，或贡献小改进时，才会继续更新。</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-编译\">编译</h2>\n<p>安装包含 XeLaTeX 和 <code>latexmk</code> 的完整 TeX Live 或 MacTeX，在仓库根目录运行上方命令。\n仓库内的 <code>.latexmkrc</code> 会将 <code>.aux</code>、<code>.log</code>、<code>.xdv</code>、SyncTeX 等工作文件统一放到\n根目录的 <code>build/</code>，仅将最终 PDF 复制到对应 <code>.tex</code> 的同级目录，具体位置见上方示例。\n<code>build/</code> 中也会保留用于增量编译的 PDF 工作副本。不要额外传入 <code>-outdir</code> 或\n<code>-auxdir</code>，以免覆盖该配置。\n补充笔记会读取 <code>build/</code> 中第一部分的 <code>.aux</code> 文件并链接到 <code>part-1.pdf</code>，\n因此需先编译 <code>part-1.tex</code>。PDF 和整个 <code>build/</code> 不会提交到 Git。\n若修改或删除了同级目录的 PDF，重新运行相应编译命令即可更新。\nVS Code 全局编译配方也可采用相同布局，在各编译入口旁的 <code>build/</code> 中保存工作文件；\n预览和 SyncTeX 使用其中的 PDF 工作副本，同级目录保留最终 PDF。</p>\n<p>两部分分别使用 <code>\\documentclass[part-one]{faa-notes}</code> 和\n<code>\\documentclass[part-two]{faa-notes}</code>。第二部分保留原有的附加数学命令、\n列表宏包、编号在前的定理标题及共享的公理计数器，<code>oneside</code> 等标准 <code>book</code>\n选项会传递给基础类。正文中已有的数学命令和环境名保持兼容。\n源码路径统一使用小写英文、连字符和两位章节编号，<code>README.md</code>、<code>LICENSE</code>\n等标准仓库文件名保留。</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-贡献\">贡献</h2>\n<p>欢迎提交 typo 修正和小范围勘误。如果你发现问题，可以开 issue，或者直接提交一个聚焦的 pull request。</p>\n<h2 id=\"readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-许可证\">许可证</h2>\n<p>本仓库采用 MIT License 发布。详情见 <a href=\"https://github.com/westlake-drawer/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE\">LICENSE</a>。</p>",
       "toc": [
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-fundamental-algebra-and-analysis",
           "value": "Fundamental Algebra and Analysis",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-building",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-building",
           "value": "Building",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-contributing",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-contributing",
           "value": "Contributing",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-license",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-license",
           "value": "License",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-代数与分析基础",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-代数与分析基础",
           "value": "代数与分析基础",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-编译",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-编译",
           "value": "编译",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-贡献",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-贡献",
           "value": "贡献",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-faa-lecture-notes-2025fall-2026spring-许可证",
+          "id": "readme-westlake-drawer-faa-lecture-notes-2025fall-2026spring-许可证",
           "value": "许可证",
           "level": 2
         }
       ],
-      "sourceUrl": "https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/README.md",
+      "sourceUrl": "https://github.com/westlake-drawer/FAA-lecture-notes-2025fall-2026spring/blob/main/README.md",
       "path": "README.md",
       "sha": "1853367dec0b3ed9d031327ee796abdd2094f6da",
       "syncedAt": "2026-10-25T07:42:10.904Z",
@@ -443,59 +443,59 @@
           "status": "ready",
           "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 JieteXue</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
           "toc": [],
-          "sourceUrl": "https://github.com/westlake-noter/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE",
+          "sourceUrl": "https://github.com/westlake-drawer/FAA-lecture-notes-2025fall-2026spring/blob/main/LICENSE",
           "path": "LICENSE",
           "sha": "987697909c1582b6a9e30aed9dc6843645afbc34",
           "syncedAt": "2026-10-25T07:42:11.211Z"
         }
       }
     },
-    "westlake-noter/measure-theory-and-real-analysis": {
+    "westlake-drawer/measure-theory-and-real-analysis": {
       "status": "ready",
-      "html": "<h1 id=\"readme-westlake-noter-measure-theory-and-real-analysis-measure-theory-and-real-analysis\">Measure Theory and Real Analysis</h1>\n<p>This repository contains the LaTeX source files for the <strong>Measure Theory and Real Analysis</strong> course notes.</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-noter. See <a href=\"https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-measure-theory-and-real-analysis-测度论与实分析\">测度论与实分析</h1>\n<p>本仓库整理和维护 <strong>测度论与实分析</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-measure-theory-and-real-analysis-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-noter，详见 <a href=\"https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "html": "<h1 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-measure-theory-and-real-analysis\">Measure Theory and Real Analysis</h1>\n<p>This repository contains the LaTeX source files for the <strong>Measure Theory and Real Analysis</strong> course notes.</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Measure Theory and Real Analysis.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-drawer. See <a href=\"https://github.com/westlake-drawer/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-测度论与实分析\">测度论与实分析</h1>\n<p>本仓库整理和维护 <strong>测度论与实分析</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Measure Theory and Real Analysis.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-drawer-measure-theory-and-real-analysis-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-drawer，详见 <a href=\"https://github.com/westlake-drawer/Measure-Theory-and-Real-Analysis/blob/main/LICENSE\">LICENSE</a>。</p>",
       "toc": [
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-measure-theory-and-real-analysis",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-measure-theory-and-real-analysis",
           "value": "Measure Theory and Real Analysis",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-build",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-build",
           "value": "Build",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-contributing",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-contributing",
           "value": "Contributing",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-license",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-license",
           "value": "License",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-测度论与实分析",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-测度论与实分析",
           "value": "测度论与实分析",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-编译",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-编译",
           "value": "编译",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-贡献",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-贡献",
           "value": "贡献",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-measure-theory-and-real-analysis-许可证",
+          "id": "readme-westlake-drawer-measure-theory-and-real-analysis-许可证",
           "value": "许可证",
           "level": 2
         }
       ],
-      "sourceUrl": "https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/README.md",
+      "sourceUrl": "https://github.com/westlake-drawer/Measure-Theory-and-Real-Analysis/blob/main/README.md",
       "path": "README.md",
       "sha": "4cc46bdb971b990e48b2c6626fb8f2711091bd9a",
       "syncedAt": "2026-10-25T07:42:11.185Z",
@@ -506,61 +506,61 @@
         },
         "license": {
           "status": "ready",
-          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-drawer</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
           "toc": [],
-          "sourceUrl": "https://github.com/westlake-noter/Measure-Theory-and-Real-Analysis/blob/main/LICENSE",
+          "sourceUrl": "https://github.com/westlake-drawer/Measure-Theory-and-Real-Analysis/blob/main/LICENSE",
           "path": "LICENSE",
           "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
           "syncedAt": "2026-10-25T07:42:11.529Z"
         }
       }
     },
-    "westlake-noter/ordinary-differential-equations": {
+    "westlake-drawer/ordinary-differential-equations": {
       "status": "ready",
-      "html": "<h1 id=\"readme-westlake-noter-ordinary-differential-equations-ordinary-differential-equations\">Ordinary Differential Equations</h1>\n<p>This repository contains the LaTeX source files for the <strong>Ordinary Differential Equations</strong> course notes.</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-noter. See <a href=\"https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-ordinary-differential-equations-常微分方程\">常微分方程</h1>\n<p>本仓库整理和维护 <strong>常微分方程</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-ordinary-differential-equations-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-noter，详见 <a href=\"https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>。</p>",
+      "html": "<h1 id=\"readme-westlake-drawer-ordinary-differential-equations-ordinary-differential-equations\">Ordinary Differential Equations</h1>\n<p>This repository contains the LaTeX source files for the <strong>Ordinary Differential Equations</strong> course notes.</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>: the main document, including document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-build\">Build</h2>\n<p>Install a recent full TeX Live distribution with XeLaTeX. From the repository root, run:</p>\n<pre><code class=\"language-sh\">xelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\nxelatex -interaction=nonstopmode -halt-on-error \"Ordinary Differential Equations.tex\"\n</code></pre>\n<p>PDFs, original board photographs, temporary files, and build artifacts are excluded from version control.</p>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and typesetting improvements are welcome. The notes will be updated as new chapters and corrections become available.</p>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-license\">License</h2>\n<p>MIT License. Copyright (c) 2026 westlake-drawer. See <a href=\"https://github.com/westlake-drawer/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>.</p>\n<hr>\n<h1 id=\"readme-westlake-drawer-ordinary-differential-equations-常微分方程\">常微分方程</h1>\n<p>本仓库整理和维护 <strong>常微分方程</strong> 课程笔记的 LaTeX 源文件。</p>\n<ul>\n<li><code>Ordinary Differential Equations.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-编译\">编译</h2>\n<p>安装包含 XeLaTeX 的较新完整版 TeX Live，在仓库根目录执行上面的两条编译命令。</p>\n<p>仓库仅收录源码及说明文件；PDF、原始板书照片、临时文件和编译产物不纳入版本管理。</p>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正及排版改进。仓库将随新增章节和勘误持续更新。</p>\n<h2 id=\"readme-westlake-drawer-ordinary-differential-equations-许可证\">许可证</h2>\n<p>采用 MIT 许可证，版权署名为 2026 westlake-drawer，详见 <a href=\"https://github.com/westlake-drawer/Ordinary-Differential-Equations/blob/main/LICENSE\">LICENSE</a>。</p>",
       "toc": [
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-ordinary-differential-equations",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-ordinary-differential-equations",
           "value": "Ordinary Differential Equations",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-build",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-build",
           "value": "Build",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-contributing",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-contributing",
           "value": "Contributing",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-license",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-license",
           "value": "License",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-常微分方程",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-常微分方程",
           "value": "常微分方程",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-编译",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-编译",
           "value": "编译",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-贡献",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-贡献",
           "value": "贡献",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-ordinary-differential-equations-许可证",
+          "id": "readme-westlake-drawer-ordinary-differential-equations-许可证",
           "value": "许可证",
           "level": 2
         }
       ],
-      "sourceUrl": "https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/README.md",
+      "sourceUrl": "https://github.com/westlake-drawer/Ordinary-Differential-Equations/blob/main/README.md",
       "path": "README.md",
       "sha": "427afe14175afd95ee0ab3ef7db7b5bac5e89b27",
       "syncedAt": "2026-10-25T07:42:11.682Z",
@@ -571,41 +571,41 @@
         },
         "license": {
           "status": "ready",
-          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-drawer</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
           "toc": [],
-          "sourceUrl": "https://github.com/westlake-noter/Ordinary-Differential-Equations/blob/main/LICENSE",
+          "sourceUrl": "https://github.com/westlake-drawer/Ordinary-Differential-Equations/blob/main/LICENSE",
           "path": "LICENSE",
           "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
           "syncedAt": "2026-10-25T07:42:12.044Z"
         }
       }
     },
-    "westlake-noter/probability-theory": {
+    "westlake-drawer/probability-theory": {
       "status": "ready",
-      "html": "<h1 id=\"readme-westlake-noter-probability-theory-probability-theory\">Probability Theory</h1>\n<p>This repository contains the LaTeX source files for the <strong>Probability Theory</strong> course notes.</p>\n<p>The source files are organized as follows:</p>\n<ul>\n<li><code>Probability Theory.tex</code>: the main LaTeX document, including the document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<p>The repository will be updated as new notes or corrections become available.</p>\n<h2 id=\"readme-westlake-noter-probability-theory-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and improvements to explanations or typesetting are welcome.</p>\n<hr>\n<h1 id=\"readme-westlake-noter-probability-theory-概率论\">概率论</h1>\n<p>本仓库用于整理和维护 <strong>概率论</strong> 课程笔记的 LaTeX 源文件。</p>\n<p>源文件按以下结构组织：</p>\n<ul>\n<li><code>Probability Theory.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<p>仓库将随新增笔记的整理及勘误持续更新。</p>\n<h2 id=\"readme-westlake-noter-probability-theory-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正，以及表述和排版方面的改进。</p>",
+      "html": "<h1 id=\"readme-westlake-drawer-probability-theory-probability-theory\">Probability Theory</h1>\n<p>This repository contains the LaTeX source files for the <strong>Probability Theory</strong> course notes.</p>\n<p>The source files are organized as follows:</p>\n<ul>\n<li><code>Probability Theory.tex</code>: the main LaTeX document, including the document settings and chapter entries.</li>\n<li><code>Chapters/</code>: the source files for individual chapters.</li>\n</ul>\n<p>The repository will be updated as new notes or corrections become available.</p>\n<h2 id=\"readme-westlake-drawer-probability-theory-contributing\">Contributing</h2>\n<p>Typo fixes, mathematical corrections, and improvements to explanations or typesetting are welcome.</p>\n<hr>\n<h1 id=\"readme-westlake-drawer-probability-theory-概率论\">概率论</h1>\n<p>本仓库用于整理和维护 <strong>概率论</strong> 课程笔记的 LaTeX 源文件。</p>\n<p>源文件按以下结构组织：</p>\n<ul>\n<li><code>Probability Theory.tex</code>：LaTeX 主文件，包含文档设置及各章节的引入。</li>\n<li><code>Chapters/</code>：各章节的 LaTeX 源文件。</li>\n</ul>\n<p>仓库将随新增笔记的整理及勘误持续更新。</p>\n<h2 id=\"readme-westlake-drawer-probability-theory-贡献\">贡献</h2>\n<p>欢迎提交文字勘误、数学内容修正，以及表述和排版方面的改进。</p>",
       "toc": [
         {
-          "id": "readme-westlake-noter-probability-theory-probability-theory",
+          "id": "readme-westlake-drawer-probability-theory-probability-theory",
           "value": "Probability Theory",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-probability-theory-contributing",
+          "id": "readme-westlake-drawer-probability-theory-contributing",
           "value": "Contributing",
           "level": 2
         },
         {
-          "id": "readme-westlake-noter-probability-theory-概率论",
+          "id": "readme-westlake-drawer-probability-theory-概率论",
           "value": "概率论",
           "level": 1
         },
         {
-          "id": "readme-westlake-noter-probability-theory-贡献",
+          "id": "readme-westlake-drawer-probability-theory-贡献",
           "value": "贡献",
           "level": 2
         }
       ],
-      "sourceUrl": "https://github.com/westlake-noter/Probability-Theory/blob/main/README.md",
+      "sourceUrl": "https://github.com/westlake-drawer/Probability-Theory/blob/main/README.md",
       "path": "README.md",
       "sha": "a426f629397fc9c610d4271c8562385202914c68",
       "syncedAt": "2026-10-25T07:42:12.016Z",
@@ -616,9 +616,9 @@
         },
         "license": {
           "status": "ready",
-          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-noter</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
+          "html": "<p>MIT License</p>\n<p>Copyright (c) 2026 westlake-drawer</p>\n<p>Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:</p>\n<p>The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.</p>\n<p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.</p>",
           "toc": [],
-          "sourceUrl": "https://github.com/westlake-noter/Probability-Theory/blob/main/LICENSE",
+          "sourceUrl": "https://github.com/westlake-drawer/Probability-Theory/blob/main/LICENSE",
           "path": "LICENSE",
           "sha": "4653032f18189d834ae8bba63061afcb1753f7a9",
           "syncedAt": "2026-10-25T07:42:12.308Z"

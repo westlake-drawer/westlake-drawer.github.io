@@ -9,7 +9,7 @@ export function redirectHtml(route) {
     + `<link rel="canonical" href="https://westlake-drawer.github.io${href}">`
     + `<meta http-equiv="refresh" content="0;url=${href}">`
     + `<script>location.replace(${target}+location.search+location.hash)</script>`
-    + `<a href="${href}">Continue to Westlake Noter</a></html>`;
+    + `<a href="${href}">Continue to Westlake Drawer</a></html>`;
 }
 
 export default function legacyProjectRedirects() {

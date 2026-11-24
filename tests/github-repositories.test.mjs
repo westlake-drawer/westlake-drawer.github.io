@@ -23,7 +23,7 @@ test('normalizes repository, file, release and query links to one repository', (
 
 test('ignores profiles, GitHub site pages, lookalike domains and unsafe URLs', () => {
   for (const url of [
-    'https://github.com/owner', 'https://github.com/orgs/westlake-noter',
+    'https://github.com/owner', 'https://github.com/orgs/westlake-drawer',
     'https://github.com/topics/math', 'https://github.com/settings/profile',
     'https://github.com.evil.test/owner/repo', 'javascript:alert(1)',
     'https://token@github.com/owner/repo', 'https://github.com/owner/..',

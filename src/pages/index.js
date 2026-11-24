@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <Layout
       title="Home"
-      description="Course notes and shared resources from the Westlake Noter community."
+      description="Course notes and shared resources from the Westlake Drawer community."
     >
       <main className={styles.home}>
         <section className={styles.hero} aria-labelledby="home-title">
@@ -18,7 +18,7 @@ export default function Home() {
           <div className={styles.edgeGlass} aria-hidden="true" />
           <div className={styles.copy}>
             <p className={styles.eyebrow}>A student-led, open-source collection</p>
-            <h1 id="home-title">Westlake Noter</h1>
+            <h1 id="home-title">Westlake Drawer</h1>
             <p className={styles.intro}>
               Notes worth sharing.<br />Knowledge worth building together.
             </p>
