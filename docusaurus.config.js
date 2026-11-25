@@ -7,7 +7,7 @@ import {loadLocalTabSources} from './lib/local-repository-tabs.mjs';
 import createStarSortedSidebarGenerator from './plugins/sidebar-stars.mjs';
 import {discoverDocSections, sectionNavbarItems} from './lib/docs-navigation.mjs';
 import path from 'node:path';
-import {contentRoot, contentRepository} from './lib/content-source.mjs';
+import {contentRoot, contentRepository, siteRoot} from './lib/content-source.mjs';
 import legacyProjectRedirects from './plugins/legacy-project-redirects.mjs';
 import pdfPreviews from './plugins/pdf-previews.mjs';
 
@@ -23,7 +23,7 @@ const config = {
   baseUrl: '/',
   organizationName: 'westlake-drawer',
   projectName: 'westlake-drawer.github.io',
-  staticDirectories: [path.join(contentRoot, 'static'), '.cache/pdf-static'],
+  staticDirectories: [path.join(siteRoot, 'static'), path.join(contentRoot, 'static'), '.cache/pdf-static'],
   onBrokenLinks: 'throw',
   future: {
     faster: {
@@ -91,6 +91,10 @@ const config = {
       },
       items: [
         ...sectionNavbarItems(navSections),
+        {
+          type: 'custom-search',
+          position: 'right',
+        },
         {
           type: 'custom-expandNavigation',
           position: 'right',

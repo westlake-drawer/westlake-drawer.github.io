@@ -353,3 +353,14 @@ body {
     padding: 8px 10px;
   }
 }
+
+/* Scope note pinned at the top of the Explore sidebar */
+.sidebar-scope-note {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--ifm-font-color-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
