@@ -94,10 +94,6 @@ const config = {
       items: [
         ...sectionNavbarItems(navSections),
         {
-          type: 'custom-search',
-          position: 'right',
-        },
-        {
           type: 'custom-expandNavigation',
           position: 'right',
         },
