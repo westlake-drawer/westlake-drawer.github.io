@@ -56,8 +56,8 @@ export default function Explore() {
           className={styles.input}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter by course, topic, or keyword…"
-          aria-label="Filter resources"
+          placeholder="Search courses, topics, or tools…"
+          aria-label="Search resources"
         />
         <div className={styles.chips} role="group" aria-label="Resource type">
           {['all', ...Object.keys(KIND_LABELS)].map((value) => (
