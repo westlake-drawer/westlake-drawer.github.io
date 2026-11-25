@@ -28,6 +28,25 @@ function score(entry, terms) {
   return total;
 }
 
+export function SearchBar({placeholder = 'Search courses, notes, tools…'}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" className={styles.bar} onClick={() => setOpen(true)}>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path
+            d="M10.5 3a7.5 7.5 0 1 1 4.6 13.4l4.2 4.2-1.4 1.4-4.2-4.2A7.5 7.5 0 0 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"
+            fill="currentColor"
+          />
+        </svg>
+        <span>{placeholder}</span>
+        <kbd className={styles.kbd}>Ctrl K</kbd>
+      </button>
+      {open && <SearchDialog onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
 export function SearchButton() {
   const [open, setOpen] = useState(false);
   useEffect(() => {

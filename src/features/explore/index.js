@@ -9,6 +9,7 @@ export default function Explore() {
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('all');
   const [subject, setSubject] = useState('all');
+  const [course, setCourse] = useState('all');
 
   useEffect(() => {
     fetch('/search-index.json')
@@ -21,19 +22,32 @@ export default function Explore() {
     () => [...new Set(entries.map((entry) => entry.subject).filter(Boolean))].sort(),
     [entries]
   );
+  const courses = useMemo(
+    () =>
+      [
+        ...new Set(
+          entries
+            .filter((entry) => entry.kind === 'notes' && (subject === 'all' || entry.subject === subject))
+            .map((entry) => entry.course)
+            .filter(Boolean)
+        ),
+      ].sort(),
+    [entries, subject]
+  );
 
   const results = useMemo(() => {
     const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return entries.filter((entry) => {
       if (kind !== 'all' && entry.group !== kind) return false;
       if (subject !== 'all' && entry.subject !== subject) return false;
+      if (course !== 'all' && entry.course !== course) return false;
       if (!terms.length) return true;
       const haystack = [entry.title, entry.description, entry.subject, entry.course, entry.path]
         .join(' ')
         .toLowerCase();
       return terms.every((term) => haystack.includes(term));
     });
-  }, [entries, kind, subject, query]);
+  }, [entries, kind, subject, course, query]);
 
   return (
     <div className={styles.explore}>
@@ -62,7 +76,10 @@ export default function Explore() {
             <button
               type="button"
               className={`${styles.chip} ${subject === 'all' ? styles.chipActive : ''}`}
-              onClick={() => setSubject('all')}
+              onClick={() => {
+                  setSubject('all');
+                  setCourse('all');
+                }}
             >
               All subjects
             </button>
@@ -71,7 +88,31 @@ export default function Explore() {
                 key={value}
                 type="button"
                 className={`${styles.chip} ${subject === value ? styles.chipActive : ''}`}
-                onClick={() => setSubject(value)}
+                onClick={() => {
+                  setSubject(value);
+                  setCourse('all');
+                }}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
+        )}
+        {courses.length > 0 && (
+          <div className={styles.chips} role="group" aria-label="Course">
+            <button
+              type="button"
+              className={`${styles.chip} ${course === 'all' ? styles.chipActive : ''}`}
+              onClick={() => setCourse('all')}
+            >
+              All courses
+            </button>
+            {courses.map((value) => (
+              <button
+                key={value}
+                type="button"
+                className={`${styles.chip} ${course === value ? styles.chipActive : ''}`}
+                onClick={() => setCourse(value)}
               >
                 {value}
               </button>

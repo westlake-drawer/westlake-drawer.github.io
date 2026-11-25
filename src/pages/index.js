@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import AnimatedIcon from '@site/src/components/AnimatedIcon';
 import CampusMap from '@site/src/components/CampusMap';
 import CommunityContributors from '@site/src/features/repositories/CommunityContributors';
+import {SearchBar} from '@site/src/features/search';
 import styles from './index.module.css';
 
 export default function Home() {
@@ -22,6 +23,9 @@ export default function Home() {
             <p className={styles.intro}>
               Notes worth sharing.<br />Knowledge worth building together.
             </p>
+            <div className={styles.search}>
+              <SearchBar />
+            </div>
             <div className={styles.actions}>
               <Link className={styles.primary} to="/notes/">
                 <AnimatedIcon name="book" /> Explore notes

@@ -13,7 +13,9 @@ import pdfPreviews from './plugins/pdf-previews.mjs';
 
 const sections = discoverDocSections();
 // Legal pages live in the footer, not the top navigation.
-const navSections = sections.filter(({directory}) => directory !== 'legal');
+const navSections = sections
+  .filter(({directory}) => directory !== 'legal')
+  .sort((a, b) => (a.directory === 'explore' ? -1 : b.directory === 'explore' ? 1 : 0));
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Westlake Drawer',
