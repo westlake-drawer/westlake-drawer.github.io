@@ -12,6 +12,8 @@ import legacyProjectRedirects from './plugins/legacy-project-redirects.mjs';
 import pdfPreviews from './plugins/pdf-previews.mjs';
 
 const sections = discoverDocSections();
+// Legal pages live in the footer, not the top navigation.
+const navSections = sections.filter(({directory}) => directory !== 'legal');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Westlake Drawer',
@@ -88,7 +90,7 @@ const config = {
         src: 'img/westlake-logo.svg',
       },
       items: [
-        ...sectionNavbarItems(sections),
+        ...sectionNavbarItems(navSections),
         {
           type: 'custom-expandNavigation',
           position: 'right',
@@ -105,7 +107,17 @@ const config = {
         {
           title: 'Index',
           items: [
-            ...sections.map(({directory, label}) => ({to: `/${directory}`, label})),
+            ...navSections.map(({directory, label}) => ({to: `/${directory}`, label})),
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {label: 'Legal & Safety', to: '/legal'},
+            {label: 'Disclaimer', to: '/legal/disclaimer'},
+            {label: 'Copyright', to: '/legal/copyright'},
+            {label: 'Security', to: '/legal/security'},
+            {label: 'Responsibility', to: '/legal/responsibility'},
           ],
         },
         {
@@ -122,7 +134,7 @@ const config = {
           ],
         },
       ],
-      copyright: `Westlake Drawer · ${new Date().getFullYear()}`,
+      copyright: `Westlake Drawer · ${new Date().getFullYear()} · Not affiliated with Westlake University`,
     },
     prism: {
       theme: prismThemes.github,
