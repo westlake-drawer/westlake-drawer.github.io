@@ -114,10 +114,11 @@ const config = {
           title: 'Legal',
           items: [
             {label: 'Legal & Safety', to: '/legal'},
-            {label: 'Disclaimer', to: '/legal/disclaimer'},
+            {label: 'Terms of Use', to: '/legal/terms'},
+            {label: 'Privacy Policy', to: '/legal/privacy'},
             {label: 'Copyright', to: '/legal/copyright'},
+            {label: 'Takedown', to: '/legal/takedown'},
             {label: 'Security', to: '/legal/security'},
-            {label: 'Responsibility', to: '/legal/responsibility'},
           ],
         },
         {
