@@ -1,0 +1,9 @@
+{
+  "name": "westlake-drawer-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {"westlake-drawer-mcp": "./index.js"},
+  "description": "Local MCP server that exposes the Westlake Drawer resource index to your own agent.",
+  "license": "MIT"
+}

@@ -1,0 +1,156 @@
+{
+  "paths": [
+    {
+      "id": "math-foundation",
+      "title": "Mathematics foundation",
+      "keywords": [
+        "calculus",
+        "linear algebra",
+        "foundation",
+        "basics",
+        "first year",
+        "微积分",
+        "线性代数",
+        "数学基础"
+      ],
+      "summary": "Start with calculus and linear algebra; every later analysis course assumes both.",
+      "steps": [
+        {
+          "url": "/notes/math/calculus/",
+          "why": "Limits, derivatives, integrals and series — the calculation base for everything after."
+        },
+        {
+          "url": "/notes/math/linear-algebra/",
+          "why": "Vector spaces and matrices, shared by analysis, probability and machine learning."
+        }
+      ]
+    },
+    {
+      "id": "analysis",
+      "title": "Analysis track",
+      "keywords": [
+        "analysis",
+        "measure",
+        "real analysis",
+        "probability",
+        "proof",
+        "分析",
+        "测度",
+        "实分析",
+        "概率"
+      ],
+      "summary": "Move from the algebra-and-analysis course into measure theory, then use probability to test the abstraction.",
+      "steps": [
+        {
+          "url": "/notes/math/fundamental-algebra-analysis/",
+          "why": "Settle notation for sets, maps and limits first."
+        },
+        {
+          "url": "/notes/math/measure-theory-real-analysis/",
+          "why": "Measures and measurable functions, the axiomatic base of probability."
+        },
+        {
+          "url": "/notes/math/probability-theory/",
+          "why": "Revisit probability inside the measure framework to check the abstractions land."
+        }
+      ]
+    },
+    {
+      "id": "pde",
+      "title": "Partial differential equations",
+      "keywords": [
+        "pde",
+        "partial differential",
+        "equation",
+        "fluid",
+        "heat equation",
+        "偏微分",
+        "方程",
+        "流体"
+      ],
+      "summary": "Take ordinary differential equations and analysis first, then PDEs.",
+      "steps": [
+        {
+          "url": "/notes/math/ordinary-differential-equations/",
+          "why": "Existence and solution methods for ODEs are the prerequisite."
+        },
+        {
+          "url": "/notes/math/partial-differential-equations/",
+          "why": "Start from the heat and fluid equations, with characteristics."
+        }
+      ]
+    },
+    {
+      "id": "quantum",
+      "title": "Quantum mechanics",
+      "keywords": [
+        "quantum",
+        "physics",
+        "mechanics",
+        "量子",
+        "物理",
+        "力学"
+      ],
+      "summary": "Quantum mechanics uses linear algebra as its language; get matrices and inner products first.",
+      "steps": [
+        {
+          "url": "/notes/math/linear-algebra/",
+          "why": "State vectors, operators and basis changes are linear algebra."
+        },
+        {
+          "url": "/notes/physics/quantum-mechanics/",
+          "why": "Old quantum theory through path integrals, with worked problems."
+        }
+      ]
+    },
+    {
+      "id": "ai-tools",
+      "title": "AI toolchain",
+      "keywords": [
+        "ai",
+        "tool",
+        "agent",
+        "plugin",
+        "automation",
+        "工具",
+        "插件",
+        "自动化"
+      ],
+      "summary": "Begin with skill orchestration, then add web access and 3D work; run each locally before wiring it in.",
+      "steps": [
+        {
+          "url": "/tools/chelate-shell/",
+          "why": "Turn scattered skills into a reproducible pipeline first."
+        },
+        {
+          "url": "/tools/web-forager/",
+          "why": "Give that pipeline a reliable way to read the web."
+        },
+        {
+          "url": "/tools/3d-fabric/",
+          "why": "When you need 3D work, keep the same quality gate on output."
+        }
+      ]
+    },
+    {
+      "id": "chemistry",
+      "title": "General chemistry",
+      "keywords": [
+        "chemistry",
+        "thermodynamics",
+        "electrochemistry",
+        "kinetics",
+        "化学",
+        "热力学",
+        "电化学"
+      ],
+      "summary": "Start with thermodynamics and electrochemistry, then the kinetics derivations.",
+      "steps": [
+        {
+          "url": "/notes/chemistry/general-chemistry/",
+          "why": "Definition/proposition/example structure makes it a good first chemistry course."
+        }
+      ]
+    }
+  ]
+}
