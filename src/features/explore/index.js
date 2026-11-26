@@ -35,7 +35,7 @@ export default function Explore() {
     [entries, subject]
   );
 
-  const results = useMemo(() => {
+  const filtered = useMemo(() => {
     const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return entries.filter((entry) => {
       if (kind !== 'all' && entry.group !== kind) return false;
@@ -48,6 +48,7 @@ export default function Explore() {
       return terms.every((term) => haystack.includes(term));
     });
   }, [entries, kind, subject, course, query]);
+  const results = useMemo(() => filtered.slice(0, 9), [filtered]);
 
   return (
     <div className={styles.explore}>
@@ -99,30 +100,21 @@ export default function Explore() {
           </div>
         )}
         {courses.length > 0 && (
-          <div className={styles.chips} role="group" aria-label="Course">
-            <button
-              type="button"
-              className={`${styles.chip} ${course === 'all' ? styles.chipActive : ''}`}
-              onClick={() => setCourse('all')}
-            >
-              All courses
-            </button>
-            {courses.map((value) => (
-              <button
-                key={value}
-                type="button"
-                className={`${styles.chip} ${course === value ? styles.chipActive : ''}`}
-                onClick={() => setCourse(value)}
-              >
-                {value}
-              </button>
-            ))}
-          </div>
+          <label className={styles.courseSelect}>
+            <span>Course</span>
+            <select value={course} onChange={(event) => setCourse(event.target.value)}>
+              <option value="all">All courses</option>
+              {courses.map((value) => (
+                <option key={value} value={value}>{value}</option>
+              ))}
+            </select>
+          </label>
         )}
       </div>
 
       <p className={styles.count}>
-        {results.length} {results.length === 1 ? 'resource' : 'resources'}
+        {filtered.length} {filtered.length === 1 ? 'resource' : 'resources'}
+        {filtered.length > results.length ? ` · showing the first ${results.length}` : ''}
       </p>
 
       <ul className={styles.grid}>
