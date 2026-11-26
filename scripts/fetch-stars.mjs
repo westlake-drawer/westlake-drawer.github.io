@@ -4,6 +4,7 @@ import {execFileSync} from 'node:child_process';
 
 const factsFile = path.join(process.cwd(), 'src', 'data', 'resources.json');
 const outFile = path.join(process.cwd(), 'src', 'data', 'stars.json');
+const trendFile = path.join(process.cwd(), 'src', 'data', 'stars-trend.json');
 
 let token = process.env.GITHUB_TOKEN || '';
 if (!token) {
@@ -38,5 +39,13 @@ for (const repo of repos) {
   }
 }
 
+const trend = {};
+for (const [repo, value] of Object.entries(stars)) {
+  if (typeof previous[repo] === 'number' && typeof value === 'number') {
+    const delta = value - previous[repo];
+    if (delta !== 0) trend[repo] = delta;
+  }
+}
 await writeFile(outFile, JSON.stringify(stars, null, 2));
+await writeFile(trendFile, JSON.stringify(trend, null, 2));
 console.log(`stars: ${Object.keys(stars).length}/${repos.length} repos resolved`);

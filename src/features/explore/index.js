@@ -1,17 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
-import liveStars from '@site/src/data/stars.json';
-import snapshot from '@site/src/data/repository-contributors.json';
 import styles from './styles.module.css';
-
-const snapshotStars = Object.fromEntries(
-  Object.entries(snapshot.repositories ?? {}).map(([key, value]) => [key, value.info?.stars ?? 0])
-);
-
-function starsOf(repo) {
-  if (!repo) return 0;
-  return liveStars[repo] ?? liveStars[repo.toLowerCase()] ?? snapshotStars[repo.toLowerCase()] ?? 0;
-}
 
 const kinds = ['all', 'Course Notes', 'Tools'];
 
@@ -62,16 +51,6 @@ export default function Explore() {
   }, [entries, kind, subject, course, query]);
 
   const results = useMemo(() => filtered.slice(0, 9), [filtered]);
-
-  const ranking = useMemo(
-    () =>
-      [...entries]
-        .map((entry) => ({entry, stars: starsOf(entry.repo)}))
-        .filter((item) => item.stars > 0)
-        .sort((a, b) => b.stars - a.stars || a.entry.title.localeCompare(b.entry.title))
-        .slice(0, 8),
-    [entries]
-  );
 
   const countFor = (predicate) => entries.filter(predicate).length;
 
@@ -161,19 +140,6 @@ export default function Explore() {
         {results.length === 0 && <p className={styles.empty}>Nothing matches those filters.</p>}
       </div>
 
-      <aside className={styles.ranking}>
-        <h4 className={styles.facetTitle}>Ranking</h4>
-        <p className={styles.rankingNote}>By GitHub stars</p>
-        <ol className={styles.rankList}>
-          {ranking.map(({entry, stars}, index) => (
-            <li key={entry.url} className={styles.rankItem}>
-              <span className={styles.rankNumber}>{index + 1}</span>
-              <Link className={styles.rankTitle} to={entry.url}>{entry.title}</Link>
-              <span className={styles.rankStars}>{stars}</span>
-            </li>
-          ))}
-        </ol>
-      </aside>
     </div>
   );
 }
