@@ -199,3 +199,11 @@
 :global(.theme-doc-markdown):has(.layout) {
   max-width: 1180px;
 }
+
+/* Breathing room between the results block and the route section. */
+:global(.theme-doc-markdown):has(.layout) h2 {
+  margin-top: 96px;
+}
+:global(.theme-doc-markdown):has(.layout) hr {
+  margin: 48px 0 26px;
+}
