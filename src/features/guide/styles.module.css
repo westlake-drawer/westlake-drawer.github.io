@@ -134,3 +134,15 @@
   resize: vertical;
   margin-bottom: 10px;
 }
+
+.guide {
+  text-align: left;
+}
+.mcp {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--ifm-font-color-secondary);
+}
+.mcp a {
+  margin-left: 4px;
+}

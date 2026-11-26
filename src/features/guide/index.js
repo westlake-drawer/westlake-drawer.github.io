@@ -171,8 +171,6 @@ export default function Guide() {
         </section>
       ))}
 
-      <PromptBuilder />
-
       {submitted && suggested.length === 0 && fallback.length > 0 && (
         <section className={styles.path}>
           <h3 className={styles.pathTitle}>Maybe related</h3>
@@ -187,6 +185,15 @@ export default function Guide() {
           </ol>
         </section>
       )}
+
+      <PromptBuilder />
+
+      <p className={styles.mcp}>
+        Prefer your own agent? Add the site as a local MCP server —
+        <a href="https://github.com/westlake-drawer/westlake-drawer.github.io/tree/main/mcp" target="_blank" rel="noreferrer">
+          Try the MCP server
+        </a>
+      </p>
     </div>
   );
 }
