@@ -1,0 +1,106 @@
+{
+  "/notes/math/calculus/": {
+    "title": "Calculus",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Calculus",
+    "repo": "qwerasdasd1/Calculus-notes"
+  },
+  "/notes/math/fundamental-algebra-analysis/": {
+    "title": "Fundamental Algebra and Analysis",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Fundamental Algebra and Analysis",
+    "repo": "westlake-drawer/FAA-lecture-notes-2025fall-2026spring"
+  },
+  "/notes/chemistry/general-chemistry/": {
+    "title": "General Chemistry",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Chemistry",
+    "course": "General Chemistry",
+    "repo": "JiamingShi-JsPhys/chem-notes"
+  },
+  "/notes/math/linear-algebra/": {
+    "title": "Linear Algebra",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Linear Algebra",
+    "repo": "qwerasdasd1/Linear-Algebra-notes"
+  },
+  "/notes/math/measure-theory-real-analysis/": {
+    "title": "Measure Theory and Real Analysis",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Measure Theory and Real Analysis",
+    "repo": "westlake-drawer/Measure-Theory-and-Real-Analysis"
+  },
+  "/notes/math/ordinary-differential-equations/": {
+    "title": "Ordinary Differential Equations",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Ordinary Differential Equations",
+    "repo": "westlake-drawer/Ordinary-Differential-Equations"
+  },
+  "/notes/math/partial-differential-equations/": {
+    "title": "Partial Differential Equations",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Partial Differential Equations",
+    "repo": "qwerasdasd1/PDE-notes"
+  },
+  "/notes/math/probability-theory/": {
+    "title": "Probability Theory",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Mathematics",
+    "course": "Probability Theory",
+    "repo": "westlake-drawer/Probability-Theory"
+  },
+  "/notes/physics/quantum-mechanics/": {
+    "title": "Quantum Mechanics",
+    "kind": "notes",
+    "group": "Course Notes",
+    "subject": "Physics",
+    "course": "Quantum Mechanics",
+    "repo": "JieteXue/quantum-mechanics-notes"
+  },
+  "/tools/3d-fabric/": {
+    "title": "3D Fabric",
+    "kind": "tool",
+    "group": "Tools",
+    "subject": "",
+    "course": "AI Tools",
+    "repo": "JiamingShi-JsPhys/3d-fabric"
+  },
+  "/tools/chelate-shell/": {
+    "title": "Chelate Shell",
+    "kind": "tool",
+    "group": "Tools",
+    "subject": "",
+    "course": "AI Tools",
+    "repo": "JiamingShi-JsPhys/chelate-shell"
+  },
+  "/tools/vesper-board/": {
+    "title": "Vesper Board",
+    "kind": "tool",
+    "group": "Tools",
+    "subject": "",
+    "course": "Apps",
+    "repo": "JiamingShi-JsPhys/vesper-board"
+  },
+  "/tools/web-forager/": {
+    "title": "web-forager",
+    "kind": "tool",
+    "group": "Tools",
+    "subject": "",
+    "course": "AI Tools",
+    "repo": "JiamingShi-JsPhys/web-forager"
+  }
+}

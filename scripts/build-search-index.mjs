@@ -4,6 +4,7 @@ import {contentRoot} from '../lib/content-source.mjs';
 
 const docsRoot = path.join(contentRoot, 'docs');
 const outFile = path.join(process.cwd(), 'static', 'search-index.json');
+const dataFile = path.join(process.cwd(), 'src', 'data', 'resources.json');
 
 const SKIP_SECTIONS = new Set(['legal', 'explore']);
 
@@ -72,7 +73,9 @@ for (const file of files) {
   const slug = (fm.slug || '').trim();
   const dirRel = rel.replace(/\/?index\.mdx?$/, '').replace(/\.mdx?$/, '');
   const url = slug.startsWith('/') ? slug : `/${dirRel}`;
+  const repoMatch = text.match(/github\.com\/([A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)/);
   entries.push({
+    repo: repoMatch ? repoMatch[1].replace(/\.git$/, '') : '',
     title: fm.title || fm.sidebar_label || dirRel.split('/').pop() || rel,
     description: fm.description || '',
     url: url.endsWith('/') ? url : `${url}/`,
@@ -86,5 +89,11 @@ for (const file of files) {
 
 entries.sort((a, b) => a.group.localeCompare(b.group) || a.title.localeCompare(b.title));
 await mkdir(path.dirname(outFile), {recursive: true});
-await writeFile(outFile, JSON.stringify({generatedAt: new Date().toISOString(), entries}, null, 0));
+const payload = {generatedAt: new Date().toISOString(), entries};
+await writeFile(outFile, JSON.stringify(payload, null, 0));
+const byUrl = Object.fromEntries(entries.map((entry) => [entry.url, {
+  title: entry.title, kind: entry.kind, group: entry.group,
+  subject: entry.subject, course: entry.course, repo: entry.repo,
+}]));
+await writeFile(dataFile, JSON.stringify(byUrl, null, 2));
 console.log(`search index: ${entries.length} entries -> ${path.relative(process.cwd(), outFile)}`);
