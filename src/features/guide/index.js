@@ -1,8 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
-import pathsData from '@site/src/data/paths.json';
-
-const {paths} = pathsData;
+import {paths} from '@site/src/data/paths.json';
 import resources from '@site/src/data/resources.json';
 import styles from './styles.module.css';
 
@@ -35,78 +33,7 @@ function matchResources(goal) {
     .slice(0, 5);
 }
 
-const MAJORS = [
-  'Mathematics', 'Physics', 'Chemistry', 'Biological Sciences', 'Materials Science',
-  'Electronic Information', 'Artificial Intelligence', 'Clinical Medicine', 'Other / general',
-];
-const YEARS = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Postgraduate', 'Any'];
-
-function buildPrompt({major, year, goal}) {
-  const items = Object.entries(resources)
-    .filter(([, item]) => major === 'Other / general' || item.subject === major)
-    .map(([url, item]) => `- ${item.title} | https://westlake-drawer.github.io${url} | ${[item.subject, item.course].filter(Boolean).join(' · ')}`);
-  const list = items.length ? items.join('\n') : '(no indexed resources in this area yet)';
-  return `I am a Westlake University student${year === 'Any' ? '' : ` in ${year}`}, studying ${major}.
-I want to: ${goal || 'find a sensible entry point'}.
-
-These are the resources Westlake Drawer currently indexes (title | link | subject · course):
-${list}
-
-Use only the links above. Give me 3–5 steps in learning order, one sentence each on why it comes first.
-Do not explain the course material, and do not introduce resources outside the list; if nothing fits, say so.`;
-}
-
-function PromptBuilder() {
-  const [major, setMajor] = useState(MAJORS[0]);
-  const [year, setYear] = useState('大二');
-  const [goal, setGoal] = useState('');
-  const [copied, setCopied] = useState(false);
-  const prompt = useMemo(() => buildPrompt({major, year, goal}), [major, year, goal]);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(false);
-    }
-  };
-
-  return (
-    <section className={styles.builder}>
-      <h2 className={styles.builderTitle}>Generate a prompt</h2>
-      <p className={styles.summary}>
-        No model runs here. Pick a direction and a goal, copy the prompt, and paste it into
-        whatever chat window you already use — the links and the boundaries are already in it.
-      </p>
-      <div className={styles.fields}>
-        <label className={styles.field}>
-          <span>Direction</span>
-          <select value={major} onChange={(event) => setMajor(event.target.value)}>
-            {MAJORS.map((value) => <option key={value} value={value}>{value}</option>)}
-          </select>
-        </label>
-        <label className={styles.field}>
-          <span>Year</span>
-          <select value={year} onChange={(event) => setYear(event.target.value)}>
-            {YEARS.map((value) => <option key={value} value={value}>{value}</option>)}
-          </select>
-        </label>
-        <label className={`${styles.field} ${styles.wide}`}>
-          <span>Goal</span>
-          <input value={goal} onChange={(event) => setGoal(event.target.value)} placeholder="e.g. build a maths foundation from zero / get started with the AI toolchain" />
-        </label>
-      </div>
-      <textarea className={styles.prompt} readOnly value={prompt} rows={12} />
-      <button type="button" className={styles.button} onClick={copy}>
-        {copied ? 'Copied' : 'Copy prompt'}
-      </button>
-    </section>
-  );
-}
-
-export default function Guide() {
+export function PathFinder() {
   const [goal, setGoal] = useState('');
   const [submitted, setSubmitted] = useState('');
 
@@ -126,7 +53,7 @@ export default function Guide() {
           className={styles.input}
           value={goal}
           onChange={(event) => setGoal(event.target.value)}
-          placeholder="e.g. I want to build a mathematics foundation / get started with AI tools"
+          placeholder="e.g. I want to build a mathematics foundation"
           aria-label="Describe what you want to learn"
         />
         <button className={styles.button} type="submit">Get a path</button>
@@ -185,15 +112,97 @@ export default function Guide() {
           </ol>
         </section>
       )}
-
-      <PromptBuilder />
-
-      <p className={styles.mcp}>
-        Prefer your own agent? Add the site as a local MCP server —
-        <a href="https://github.com/westlake-drawer/westlake-drawer.github.io/tree/main/mcp" target="_blank" rel="noreferrer">
-          Try the MCP server
-        </a>
-      </p>
     </div>
   );
 }
+
+const MAJORS = [
+  'Mathematics', 'Physics', 'Chemistry', 'Biological Sciences', 'Materials Science',
+  'Electronic Information', 'Artificial Intelligence', 'Clinical Medicine', 'Other / general',
+];
+const YEARS = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Postgraduate', 'Any'];
+
+function buildPrompt({major, year, goal}) {
+  const items = Object.entries(resources)
+    .filter(([, item]) => major === 'Other / general' || item.subject === major)
+    .map(([url, item]) => `- ${item.title} | https://westlake-drawer.github.io${url} | ${[item.subject, item.course].filter(Boolean).join(' · ')}`);
+  const list = items.length ? items.join('\n') : '(no indexed resources in this area yet)';
+  return `You are helping me plan my study. You are not teaching me the material.
+
+About me: Westlake University, ${year === 'Any' ? 'no fixed year' : year}, studying ${major}.
+What I want: ${goal || 'a sensible entry point into this subject'}.
+
+Resources I have on Westlake Drawer (use only these; title | link | subject · course):
+${list}
+
+Do this:
+1. Choose 3 to 5 items from the list that form a sensible order for my goal.
+2. For each, write one sentence explaining why it comes at that point.
+
+Rules:
+- Do not explain the course content, derive anything, or summarise the notes.
+- Do not add resources, links, or courses that are not in the list above.
+- If the list cannot serve my goal, say so in one sentence and stop.
+
+Output: a numbered list where each item is "Title — link — one-sentence reason".`;
+}
+
+export function PromptBuilder() {
+  const [major, setMajor] = useState(MAJORS[0]);
+  const [year, setYear] = useState('Year 2');
+  const [goal, setGoal] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const prompt = useMemo(() => buildPrompt({major, year, goal}), [major, year, goal]);
+  const count = useMemo(
+    () => Object.values(resources).filter((item) => major === 'Other / general' || item.subject === major).length,
+    [major]
+  );
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <section className={styles.builder}>
+      <div className={styles.fields}>
+        <label className={styles.field}>
+          <span>Direction</span>
+          <select value={major} onChange={(event) => setMajor(event.target.value)}>
+            {MAJORS.map((value) => <option key={value} value={value}>{value}</option>)}
+          </select>
+        </label>
+        <label className={styles.field}>
+          <span>Year</span>
+          <select value={year} onChange={(event) => setYear(event.target.value)}>
+            {YEARS.map((value) => <option key={value} value={value}>{value}</option>)}
+          </select>
+        </label>
+        <label className={`${styles.field} ${styles.wide}`}>
+          <span>Goal</span>
+          <input
+            value={goal}
+            onChange={(event) => setGoal(event.target.value)}
+            placeholder="e.g. build a maths foundation from zero"
+          />
+        </label>
+      </div>
+      <div className={styles.copyRow}>
+        <button type="button" className={styles.button} onClick={copy}>
+          {copied ? 'Copied' : 'Copy prompt'}
+        </button>
+        <span className={styles.copyNote}>
+          {count} {count === 1 ? 'resource' : 'resources'} included · paste it into the assistant you already use
+        </span>
+      </div>
+    </section>
+  );
+}
+
+export default PathFinder;

@@ -23,6 +23,12 @@ export default function CommunityContributors() {
         users={[...users.values()].sort((a, b) => a.login.localeCompare(b.login))}
         limit={48}
       />
+      <p className={styles.maintainers}>
+        Website design and maintenance:{' '}
+        <a href="https://github.com/JiamingShi-JsPhys">JiamingShi-JsPhys</a>,{' '}
+        <a href="https://github.com/JieteXue">JieteXue</a>,{' '}
+        <a href="https://github.com/qwerasdasd1">qwerasdasd1</a>
+      </p>
     </section>
   );
 }

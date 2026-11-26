@@ -161,3 +161,14 @@
     transform: none;
   }
 }
+
+.maintainers {
+  margin: 14px 0 0;
+  color: var(--ifm-font-color-secondary);
+  font-size: 12px;
+}
+.maintainers a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

@@ -146,3 +146,14 @@
 .mcp a {
   margin-left: 4px;
 }
+
+.copyRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.copyNote {
+  color: var(--ifm-font-color-secondary);
+  font-size: 12px;
+}
