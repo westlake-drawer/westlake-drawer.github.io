@@ -5,6 +5,7 @@ import {contentRoot} from '../lib/content-source.mjs';
 const docsRoot = path.join(contentRoot, 'docs');
 const outFile = path.join(process.cwd(), 'static', 'search-index.json');
 const dataFile = path.join(process.cwd(), 'src', 'data', 'resources.json');
+const subjectsFile = path.join(process.cwd(), 'src', 'data', 'subjects.json');
 
 const SKIP_SECTIONS = new Set(['legal', 'explore']);
 
@@ -89,6 +90,29 @@ for (const file of files) {
 
 entries.sort((a, b) => a.group.localeCompare(b.group) || a.title.localeCompare(b.title));
 await mkdir(path.dirname(outFile), {recursive: true});
+const subjects = [];
+let subjectsZh = {};
+try {
+  subjectsZh = JSON.parse(await readFile(path.join(contentRoot, 'data', 'subjects-zh.json'), 'utf8'));
+} catch {}
+const notesDir = path.join(docsRoot, 'notes');
+for (const entry of await readdir(notesDir, {withFileTypes: true})) {
+  if (!entry.isDirectory() || entry.name.startsWith('_') || entry.name.startsWith('.')) continue;
+  let meta = {};
+  try {
+    meta = JSON.parse(await readFile(path.join(notesDir, entry.name, '_category_.json'), 'utf8'));
+  } catch {}
+  subjects.push({
+    slug: entry.name,
+    label: meta.label ?? entry.name,
+    labelZh: subjectsZh[entry.name]?.label ?? '',
+    description: meta.description ?? '',
+    descriptionZh: subjectsZh[entry.name]?.description ?? '',
+  });
+}
+subjects.sort((a, b) => a.label.localeCompare(b.label));
+await writeFile(subjectsFile, JSON.stringify(subjects, null, 2));
+
 const payload = {generatedAt: new Date().toISOString(), entries};
 await writeFile(outFile, JSON.stringify(payload, null, 0));
 const byUrl = Object.fromEntries(entries.map((entry) => [entry.url, {

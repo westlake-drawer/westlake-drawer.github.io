@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "artificial-intelligence",
+    "label": "Artificial Intelligence",
+    "labelZh": "人工智能",
+    "description": "Machine learning, optimisation and AI systems course notes.",
+    "descriptionZh": "机器学习、优化与 AI 系统的课程笔记。"
+  },
+  {
+    "slug": "biology",
+    "label": "Biological Sciences",
+    "labelZh": "生物科学",
+    "description": "Cell biology, genetics, biochemistry and related course notes.",
+    "descriptionZh": "细胞生物学、遗传学、生物化学及相关课程。"
+  },
+  {
+    "slug": "chemistry",
+    "label": "Chemistry",
+    "labelZh": "化学",
+    "description": "General, organic, physical and inorganic chemistry course notes.",
+    "descriptionZh": "普通化学、有机化学、物理化学与无机化学的课程笔记。"
+  },
+  {
+    "slug": "clinical-medicine",
+    "label": "Clinical Medicine",
+    "labelZh": "临床医学",
+    "description": "Preclinical and clinical course notes for the medicine track.",
+    "descriptionZh": "医学方向的基础与临床课程。"
+  },
+  {
+    "slug": "electronic-information",
+    "label": "Electronic Information",
+    "labelZh": "电子信息工程",
+    "description": "Circuits, signals, electronics and communication course notes.",
+    "descriptionZh": "电路、信号、电子学与通信的课程笔记。"
+  },
+  {
+    "slug": "materials-science",
+    "label": "Materials Science",
+    "labelZh": "材料科学与工程",
+    "description": "Materials structure, characterisation and processing course notes.",
+    "descriptionZh": "材料的结构、表征与加工。"
+  },
+  {
+    "slug": "math",
+    "label": "Mathematics",
+    "labelZh": "数学与应用数学",
+    "description": "Calculus, algebra, analysis and probability course notes.",
+    "descriptionZh": "微积分、代数、分析与概率的课程笔记。"
+  },
+  {
+    "slug": "physics",
+    "label": "Physics",
+    "labelZh": "物理学",
+    "description": "Mechanics, electromagnetism, quantum mechanics and related courses.",
+    "descriptionZh": "力学、电磁学、量子力学及相关课程。"
+  }
+]
