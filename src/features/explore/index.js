@@ -1,12 +1,14 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
 import {useLang} from '@site/src/features/i18n';
+import subjectMeta from '@site/src/data/subjects.json';
 import styles from './styles.module.css';
 
 const kinds = ['all', 'Course Notes', 'Tools'];
 
 export default function Explore() {
-  const {t} = useLang();
+  const {t, lang} = useLang();
+  const subjectZh = Object.fromEntries(subjectMeta.map((s) => [s.label, s.labelZh || s.label]));
   const [entries, setEntries] = useState([]);
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('all');
@@ -121,7 +123,7 @@ export default function Explore() {
         )}
 
         <p className={styles.count}>
-          {filtered.length} {filtered.length === 1 ? 'resource' : 'resources'}
+          {lang === 'zh' ? `${filtered.length} 条资源` : `${filtered.length} ${filtered.length === 1 ? 'resource' : 'resources'}`}
           {filtered.length > results.length ? ` · ${t('explore.showing')} ${results.length}` : ''}
         </p>
 
@@ -129,9 +131,9 @@ export default function Explore() {
           {results.map((entry) => (
             <li key={entry.url}>
               <Link className={styles.card} to={entry.url}>
-                <span className={styles.cardKind}>{entry.group}</span>
+                <span className={styles.cardKind}>{entry.group === 'Course Notes' ? t('explore.notes') : t('explore.tools')}</span>
                 <strong className={styles.cardTitle}>{entry.title}</strong>
-                {entry.description && <span className={styles.cardDesc}>{entry.description}</span>}
+                <span className={styles.cardDesc}>{lang === 'zh' && entry.descriptionZh ? entry.descriptionZh : entry.description}</span>
                 <span className={styles.cardMeta}>
                   {[entry.subject, entry.course].filter(Boolean).join(' · ')}
                 </span>

@@ -67,6 +67,48 @@ const STRINGS = {
   'footer.community': {en: 'Community', zh: '社区'},
 };
 
+
+// Docusaurus renders some strings at build time and cannot read React context.
+// These exact-phrase swaps cover that chrome; they never touch page copy.
+const THEME_PAIRS = [
+  ['Edit this page', '编辑此页'],
+  ['On this page', '本页内容'],
+  ['Previous', '上一篇'],
+  ['Next', '下一篇'],
+  ['Index', '索引'],
+  ['Legal', '法律'],
+  ['Community', '社区'],
+  ['Explore', '浏览'],
+  ['Course Notes', '课程笔记'],
+  ['Submit', '提交'],
+  ['Tools', '工具'],
+  ['Legal & Safety', '法律与安全'],
+  ['Terms of Use', '使用条款'],
+  ['Privacy Policy', '隐私政策'],
+  ['Copyright', '版权'],
+  ['Takedown', '侵权处理'],
+  ['Security', '安全'],
+  ['Community Hub', '社区中心'],
+  ['Join the Organization', '加入组织'],
+  ['Last updated on', '最后更新于'],
+];
+
+function swapTextNodes(lang) {
+  const pairs = lang === 'zh' ? THEME_PAIRS : THEME_PAIRS.map(([en, zh]) => [zh, en]);
+  const dict = new Map(pairs);
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) {
+    const raw = node.nodeValue;
+    if (!raw) continue;
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    const hit = dict.get(trimmed);
+    if (hit) node.nodeValue = raw.replace(trimmed, hit);
+  }
+}
+
 const LanguageContext = createContext({lang: 'en', setLang: () => {}, t: (key, fallback) => fallback ?? key});
 
 const STORAGE_KEY = 'westlake-drawer-lang';
@@ -83,6 +125,10 @@ export function LanguageProvider({children}) {
 
   useEffect(() => {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    swapTextNodes(lang);
+    const observer = new MutationObserver(() => swapTextNodes(lang));
+    observer.observe(document.body, {childList: true, subtree: true});
+    return () => observer.disconnect();
   }, [lang]);
 
   const setLang = useCallback((next) => {

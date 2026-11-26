@@ -62,6 +62,11 @@ function classify(rel) {
   return null;
 }
 
+let resourcesZh = {};
+try {
+  resourcesZh = JSON.parse(await readFile(path.join(contentRoot, 'data', 'resources-zh.json'), 'utf8'));
+} catch {}
+
 await collectLabels(docsRoot);
 const files = await walk(docsRoot);
 const entries = [];
@@ -73,13 +78,15 @@ for (const file of files) {
   const fm = frontMatter(text);
   const slug = (fm.slug || '').trim();
   const dirRel = rel.replace(/\/?index\.mdx?$/, '').replace(/\.mdx?$/, '');
-  const url = slug.startsWith('/') ? slug : `/${dirRel}`;
+  const rawUrl = slug.startsWith('/') ? slug : `/${dirRel}`;
+  const url = rawUrl.endsWith('/') ? rawUrl : `${rawUrl}/`;
   const repoMatch = text.match(/github\.com\/([A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)/);
   entries.push({
     repo: repoMatch ? repoMatch[1].replace(/\.git$/, '') : '',
     title: fm.title || fm.sidebar_label || dirRel.split('/').pop() || rel,
     description: fm.description || '',
-    url: url.endsWith('/') ? url : `${url}/`,
+    descriptionZh: resourcesZh[url] ?? '',
+    url,
     kind: info.kind,
     group: info.group,
     subject: info.subject,
