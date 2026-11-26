@@ -4,11 +4,16 @@ import snapshot from '@site/src/data/repository-contributors.json';
 import ContributorAvatars from './ContributorAvatars';
 import styles from './styles.module.css';
 
+const MAINTAINERS = ['JiamingShi-JsPhys', 'JieteXue', 'qwerasdasd1'];
+
 export default function CommunityContributors() {
   const users = new Map();
   Object.values(snapshot.repositories).forEach((repository) => {
     repository.contributors?.forEach((user) => users.set(user.id, user));
   });
+  const maintainers = MAINTAINERS.map((login) =>
+    [...users.values()].find((user) => user.login.toLowerCase() === login.toLowerCase())
+    ?? {id: null, login});
   if (!users.size) return null;
   return (
     <section className={styles.community} aria-labelledby="community-contributors">
@@ -30,11 +35,7 @@ export default function CommunityContributors() {
         </div>
         <Link to="/explore/assistants/">Use the index with your own agent</Link>
       </div>
-      <p className={styles.maintainers}>
-        <a href="https://github.com/JiamingShi-JsPhys">JiamingShi-JsPhys</a>
-        <a href="https://github.com/JieteXue">JieteXue</a>
-        <a href="https://github.com/qwerasdasd1">qwerasdasd1</a>
-      </p>
+      <ContributorAvatars users={maintainers} limit={3} />
     </section>
   );
 }

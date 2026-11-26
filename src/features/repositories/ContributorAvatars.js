@@ -11,7 +11,9 @@ function Avatar({user}) {
       aria-label={`${user.login} on GitHub`}>
       {failed ? <span aria-hidden="true">{user.login.slice(0, 1).toUpperCase()}</span> : (
         <img
-          src={`https://avatars.githubusercontent.com/u/${user.id}?s=80`}
+          src={user.id
+            ? `https://avatars.githubusercontent.com/u/${user.id}?s=80`
+            : `https://github.com/${encodeURIComponent(user.login)}.png?size=80`}
           alt=""
           width="36"
           height="36"
