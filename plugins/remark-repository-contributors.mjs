@@ -2,7 +2,7 @@ import {repositoriesFromTree} from '../lib/github/repositories.mjs';
 
 // Legal pages and subject landing pages link to GitHub only for convenience;
 // they are not repository pages, so no README tabs or repository cards.
-const NON_REPOSITORY_SECTIONS = ['/docs/legal/'];
+const NON_REPOSITORY_SECTIONS = ['/docs/legal/', '/docs/explore/'];
 const NON_REPOSITORY_PAGES = [/\/docs\/notes\/[^/]+\/index\.mdx?$/];
 
 export default function remarkRepositoryContributors() {

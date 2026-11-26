@@ -23,10 +23,16 @@ export default function CommunityContributors() {
         users={[...users.values()].sort((a, b) => a.login.localeCompare(b.login))}
         limit={48}
       />
+      <div className={styles.communityHeading}>
+        <div>
+          <h2>Website design &amp; maintenance</h2>
+          <p>The site, the index, and the MCP server.</p>
+        </div>
+        <Link to="/explore/assistants/">Use the index with your own agent</Link>
+      </div>
       <p className={styles.maintainers}>
-        Website design and maintenance:{' '}
-        <a href="https://github.com/JiamingShi-JsPhys">JiamingShi-JsPhys</a>,{' '}
-        <a href="https://github.com/JieteXue">JieteXue</a>,{' '}
+        <a href="https://github.com/JiamingShi-JsPhys">JiamingShi-JsPhys</a>
+        <a href="https://github.com/JieteXue">JieteXue</a>
         <a href="https://github.com/qwerasdasd1">qwerasdasd1</a>
       </p>
     </section>

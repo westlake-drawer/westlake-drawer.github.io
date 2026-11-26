@@ -163,9 +163,23 @@
 }
 
 .maintainers {
-  margin: 14px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+.maintainers a {
+  padding: 5px 11px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
   color: var(--ifm-font-color-secondary);
-  font-size: 12px;
+  font-size: 13px;
+  text-decoration: none;
+}
+.maintainers a:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
 }
 .maintainers a {
   color: inherit;
