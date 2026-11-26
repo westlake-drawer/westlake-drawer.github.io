@@ -7,6 +7,7 @@ import LegalIndex from '@site/src/features/legal';
 import ResourceFacts, {RepoVersion} from '@site/src/features/resources';
 import {PathFinder, PromptBuilder} from '@site/src/features/guide';
 import McpSetup from '@site/src/features/mcp';
+import SubmitButtons from '@site/src/features/submit';
 
 export default {
   ...MDXComponents,
@@ -18,6 +19,7 @@ export default {
   PathFinder,
   PromptBuilder,
   McpSetup,
+  SubmitButtons,
   Tabs,
   TabItem,
 };
