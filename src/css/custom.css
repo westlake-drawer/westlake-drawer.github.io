@@ -354,3 +354,14 @@ body {
   }
 }
 
+/* Section links rendered by the custom navbar item (locale-aware labels). */
+.navbar__link.section-link {
+  padding: 0.5rem 0.75rem;
+  margin-right: 2px;
+}
+@media (max-width: 996px) {
+  .navbar__link.section-link {
+    padding: 0.5rem 0.55rem;
+    font-size: 0.9rem;
+  }
+}

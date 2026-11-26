@@ -2,6 +2,7 @@ import React, {useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
 import {paths} from '@site/src/data/paths.json';
 import resources from '@site/src/data/resources.json';
+import {useLang} from '@site/src/features/i18n';
 import styles from './styles.module.css';
 
 const titleOf = (url) => resources[url]?.title ?? url;
@@ -34,6 +35,7 @@ function matchResources(goal) {
 }
 
 export function PathFinder() {
+  const {t} = useLang();
   const [goal, setGoal] = useState('');
   const [submitted, setSubmitted] = useState('');
 
@@ -53,10 +55,10 @@ export function PathFinder() {
           className={styles.input}
           value={goal}
           onChange={(event) => setGoal(event.target.value)}
-          placeholder="e.g. I want to build a mathematics foundation"
+          placeholder={t('path.placeholder')}
           aria-label="Describe what you want to learn"
         />
-        <button className={styles.button} type="submit">Get a path</button>
+        <button className={styles.button} type="submit">{t('path.submit')}</button>
       </form>
 
       {!submitted && (
@@ -79,7 +81,7 @@ export function PathFinder() {
 
       {submitted && suggested.length === 0 && fallback.length === 0 && (
         <p className={styles.empty}>
-          No path matched. Try different wording, or browse <Link to="/explore/">Explore</Link> directly.
+          {t('path.empty')} <Link to="/explore/">Explore</Link>.
         </p>
       )}
 
@@ -100,8 +102,8 @@ export function PathFinder() {
 
       {submitted && suggested.length === 0 && fallback.length > 0 && (
         <section className={styles.path}>
-          <h3 className={styles.pathTitle}>Maybe related</h3>
-          <p className={styles.summary}>No ready-made path, but these are closest to what you described.</p>
+          <h3 className={styles.pathTitle}>{t('path.related')}</h3>
+          <p className={styles.summary}>{t('path.relatedSub')}</p>
           <ol className={styles.steps}>
             {fallback.map(({url, item}) => (
               <li key={url} className={styles.step}>
@@ -148,6 +150,7 @@ Output: a numbered list where each item is "Title — link — one-sentence reas
 }
 
 export function PromptBuilder() {
+  const {t} = useLang();
   const [major, setMajor] = useState(MAJORS[0]);
   const [year, setYear] = useState('Year 2');
   const [goal, setGoal] = useState('');
@@ -173,19 +176,19 @@ export function PromptBuilder() {
     <section className={styles.builder}>
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span>Direction</span>
+          <span>{t('prompt.direction')}</span>
           <select value={major} onChange={(event) => setMajor(event.target.value)}>
             {MAJORS.map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
         </label>
         <label className={styles.field}>
-          <span>Year</span>
+          <span>{t('prompt.year')}</span>
           <select value={year} onChange={(event) => setYear(event.target.value)}>
             {YEARS.map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
         </label>
         <label className={`${styles.field} ${styles.wide}`}>
-          <span>Goal</span>
+          <span>{t('prompt.goal')}</span>
           <input
             value={goal}
             onChange={(event) => setGoal(event.target.value)}
@@ -195,10 +198,10 @@ export function PromptBuilder() {
       </div>
       <div className={styles.copyRow}>
         <button type="button" className={styles.button} onClick={copy}>
-          {copied ? 'Copied' : 'Copy prompt'}
+          {copied ? t('prompt.copied') : t('prompt.copy')}
         </button>
         <span className={styles.copyNote}>
-          {count} {count === 1 ? 'resource' : 'resources'} included · paste it into the assistant you already use
+          {count} {t('prompt.resources')} · {t('prompt.note')}
         </span>
       </div>
     </section>

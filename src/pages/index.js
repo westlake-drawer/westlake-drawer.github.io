@@ -4,9 +4,11 @@ import Link from '@docusaurus/Link';
 import AnimatedIcon from '@site/src/components/AnimatedIcon';
 import CampusMap from '@site/src/components/CampusMap';
 import CommunityContributors from '@site/src/features/repositories/CommunityContributors';
+import {useLang} from '@site/src/features/i18n';
 import styles from './index.module.css';
 
 export default function Home() {
+  const {t} = useLang();
   return (
     <Layout
       title="Home"
@@ -17,22 +19,22 @@ export default function Home() {
           <CampusMap />
           <div className={styles.edgeGlass} aria-hidden="true" />
           <div className={styles.copy}>
-            <p className={styles.eyebrow}>A student-led, open-source collection</p>
+            <p className={styles.eyebrow}>{t('home.eyebrow')}</p>
             <h1 id="home-title">Westlake Drawer</h1>
             <p className={styles.intro}>
-              Notes worth sharing.<br />Knowledge worth building together.
+              {t('home.intro1')}<br />{t('home.intro2')}
             </p>
             <div className={styles.actions}>
               <Link className={styles.primary} to="/notes/">
-                <AnimatedIcon name="book" /> Explore notes
+                <AnimatedIcon name="book" /> {t('home.notes')}
               </Link>
               <Link className={styles.secondary} to="/tools/">
-                <AnimatedIcon name="tools" /> Tools
+                <AnimatedIcon name="tools" /> {t('home.tools')}
               </Link>
             </div>
           </div>
           <div className={styles.caption}>
-            <span>Westlake University <span aria-hidden="true">&middot;</span> Yungu Campus</span>
+            <span>{t('home.caption')} <span aria-hidden="true">&middot;</span> Yungu Campus</span>
             <span className={styles.credits}>
               Map: <a href="https://terraink.app">terraink.app</a>
               {' / '}<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>
@@ -41,17 +43,17 @@ export default function Home() {
         </section>
         <section className={styles.explore} aria-labelledby="explore-title">
           <div className={styles.sectionHeading}>
-            <h2 id="explore-title">Explore the collection</h2>
-            <p>Shared by students. Open to everyone.</p>
+            <h2 id="explore-title">{t('home.collection')}</h2>
+            <p>{t('home.collectionSub')}</p>
           </div>
           <div className={styles.destinations}>
             <Link to="/notes/" className={styles.destination}>
               <AnimatedIcon name="book" size={24} />
-              <div><h3>Course Notes</h3><p>Browse notes by subject and course.</p></div>
+              <div><h3>{t('home.destNotes')}</h3><p>{t('home.destNotesDesc')}</p></div>
             </Link>
             <Link to="/tools/" className={styles.destination}>
               <AnimatedIcon name="tools" size={24} />
-              <div><h3>Tools</h3><p>Browse tools for study and research.</p></div>
+              <div><h3>{t('home.destTools')}</h3><p>{t('home.destToolsDesc')}</p></div>
             </Link>
           </div>
         </section>

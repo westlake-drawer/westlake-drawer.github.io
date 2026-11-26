@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useLang} from '@site/src/features/i18n';
 import styles from './styles.module.css';
 
 const PATH = '/absolute/path/to/mcp/index.js';
@@ -79,6 +80,7 @@ args = ["${PATH}"]`,
 ];
 
 export default function McpSetup() {
+  const {t} = useLang();
   const [active, setActive] = useState(AGENTS[0].id);
   const agent = AGENTS.find((item) => item.id === active) ?? AGENTS[0];
 
@@ -101,8 +103,7 @@ export default function McpSetup() {
       <p className={styles.note}>{agent.note}</p>
       <pre className={styles.code}><code>{agent.code}</code></pre>
       <p className={styles.hint}>
-        Replace <code>{PATH}</code> with the absolute path of <code>mcp/index.js</code>.
-        If your client is not listed, it almost certainly accepts the JSON form above.
+        {t('mcp.replace')} <code>{PATH}</code> {t('mcp.with')} <code>mcp/index.js</code>. {t('mcp.unlisted')}
       </p>
     </div>
   );

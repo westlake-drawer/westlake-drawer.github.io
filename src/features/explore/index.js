@@ -1,10 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
+import {useLang} from '@site/src/features/i18n';
 import styles from './styles.module.css';
 
 const kinds = ['all', 'Course Notes', 'Tools'];
 
 export default function Explore() {
+  const {t} = useLang();
   const [entries, setEntries] = useState([]);
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('all');
@@ -57,7 +59,7 @@ export default function Explore() {
   return (
     <div className={styles.layout}>
       <aside className={styles.facets}>
-        <h4 className={styles.facetTitle}>Type</h4>
+        <h4 className={styles.facetTitle}>{t('explore.type')}</h4>
         {kinds.map((value) => (
           <button
             key={value}
@@ -65,12 +67,12 @@ export default function Explore() {
             className={`${styles.facet} ${kind === value ? styles.facetActive : ''}`}
             onClick={() => setKind(value)}
           >
-            <span>{value === 'all' ? 'All' : value}</span>
+            <span>{value === 'all' ? t('explore.all') : value === 'Course Notes' ? t('explore.notes') : t('explore.tools')}</span>
             <span>{value === 'all' ? entries.length : countFor((entry) => entry.group === value)}</span>
           </button>
         ))}
 
-        <h4 className={styles.facetTitle}>Subject</h4>
+        <h4 className={styles.facetTitle}>{t('explore.subject')}</h4>
         <button
           type="button"
           className={`${styles.facet} ${subject === 'all' ? styles.facetActive : ''}`}
@@ -79,7 +81,7 @@ export default function Explore() {
             setCourse('all');
           }}
         >
-          <span>All</span>
+          <span>{t('explore.all')}</span>
           <span>{subjects.length}</span>
         </button>
         {subjects.map((value) => (
@@ -103,14 +105,14 @@ export default function Explore() {
           className={styles.input}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search courses, topics, or tools…"
+          placeholder={t('explore.search')}
           aria-label="Search resources"
         />
         {courses.length > 0 && (
           <label className={styles.courseSelect}>
-            <span>Course</span>
+            <span>{t('explore.course')}</span>
             <select value={course} onChange={(event) => setCourse(event.target.value)}>
-              <option value="all">All courses</option>
+              <option value="all">{t('explore.allCourses')}</option>
               {courses.map((value) => (
                 <option key={value} value={value}>{value}</option>
               ))}
@@ -120,7 +122,7 @@ export default function Explore() {
 
         <p className={styles.count}>
           {filtered.length} {filtered.length === 1 ? 'resource' : 'resources'}
-          {filtered.length > results.length ? ` · showing the first ${results.length}` : ''}
+          {filtered.length > results.length ? ` · ${t('explore.showing')} ${results.length}` : ''}
         </p>
 
         <ul className={styles.grid}>
@@ -137,7 +139,7 @@ export default function Explore() {
             </li>
           ))}
         </ul>
-        {results.length === 0 && <p className={styles.empty}>Nothing matches those filters.</p>}
+        {results.length === 0 && <p className={styles.empty}>{t('explore.none')}</p>}
       </div>
 
     </div>

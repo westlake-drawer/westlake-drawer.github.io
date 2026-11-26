@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import liveStars from '@site/src/data/stars.json';
 import trend from '@site/src/data/stars-trend.json';
 import snapshot from '@site/src/data/repository-contributors.json';
+import {useLang} from '@site/src/features/i18n';
 import styles from './styles.module.css';
 
 const snapshotStars = Object.fromEntries(
@@ -20,6 +21,7 @@ const deltaOf = (repo) => {
 };
 
 export default function StarRanking() {
+  const {t} = useLang();
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
@@ -43,8 +45,8 @@ export default function StarRanking() {
 
   return (
     <section className={styles.ranking} aria-label="Ranking by GitHub stars">
-      <h4 className={styles.title}>Ranking</h4>
-      <p className={styles.note}>By GitHub stars · ▲▼ vs. the October snapshot</p>
+      <h4 className={styles.title}>{t('rank.title')}</h4>
+      <p className={styles.note}>{t('rank.note')} · ▲▼</p>
       <ol className={styles.list}>
         {ranking.map(({entry, stars, delta}, index) => (
           <li key={entry.url} className={styles.item}>

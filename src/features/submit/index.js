@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useLang} from '@site/src/features/i18n';
 import styles from './styles.module.css';
 
 const REPO = 'westlake-drawer/notes-index';
@@ -34,6 +35,7 @@ const issueUrl = () => {
 };
 
 export default function SubmitButtons() {
+  const {t} = useLang();
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -48,10 +50,10 @@ export default function SubmitButtons() {
   return (
     <div className={styles.wrap}>
       <a className={styles.primary} href={issueUrl()} target="_blank" rel="noreferrer">
-        Open a submission issue
+        {t('submit.open')}
       </a>
       <button type="button" className={styles.secondary} onClick={copy}>
-        {copied ? 'Copied' : 'Copy the template'}
+        {copied ? t('submit.copied') : t('submit.copy')}
       </button>
     </div>
   );

@@ -92,9 +92,13 @@ const config = {
         src: 'img/westlake-logo.svg',
       },
       items: [
-        ...sectionNavbarItems(navSections),
+        ...navSections.map(({directory, label}) => ({type: 'custom-sectionLink', to: `/${directory}`, dir: directory, label, position: 'left'})),
         {
           type: 'custom-expandNavigation',
+          position: 'right',
+        },
+        {
+          type: 'custom-language',
           position: 'right',
         },
         {

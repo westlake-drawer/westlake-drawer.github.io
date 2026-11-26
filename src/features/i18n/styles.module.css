@@ -1,0 +1,18 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ifm-font-color-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.toggle:hover {
+  color: var(--ifm-font-color-base);
+  border-color: var(--ifm-color-primary);
+}
