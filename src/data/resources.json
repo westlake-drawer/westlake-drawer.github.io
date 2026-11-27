@@ -102,5 +102,13 @@
     "subject": "",
     "course": "AI Tools",
     "repo": "JiamingShi-JsPhys/web-forager"
+  },
+  "/tools/wrasse/": {
+    "title": "wrasse",
+    "kind": "tool",
+    "group": "Tools",
+    "subject": "",
+    "course": "AI Tools",
+    "repo": "JiamingShi-JsPhys/wrasse"
   }
 }
