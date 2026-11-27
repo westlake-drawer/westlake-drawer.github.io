@@ -44,3 +44,29 @@
   color: var(--ifm-font-color-secondary);
   font-size: 11px;
 }
+
+.intro {
+  margin: 0 0 20px;
+}
+.courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.courseCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 13px 15px;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  background: var(--ifm-background-surface-color);
+  color: inherit;
+}
+.courseCard:hover {
+  border-color: var(--ifm-color-primary);
+}

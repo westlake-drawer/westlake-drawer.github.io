@@ -15,7 +15,10 @@ const sections = discoverDocSections();
 // Legal pages live in the footer, not the top navigation.
 const navSections = sections
   .filter(({directory}) => directory !== 'legal')
-  .sort((a, b) => (a.directory === 'explore' ? -1 : b.directory === 'explore' ? 1 : 0));
+  .sort((a, b) => {
+    const rank = (dir) => (dir === 'explore' ? 0 : dir === 'submit' ? 2 : 1);
+    return rank(a.directory) - rank(b.directory) || a.label.localeCompare(b.label);
+  });
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Westlake Drawer',

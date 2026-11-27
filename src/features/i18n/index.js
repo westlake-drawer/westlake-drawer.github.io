@@ -90,8 +90,6 @@ const THEME_PAIRS = [
   ['Security', '安全'],
   ['Community Hub', '社区中心'],
   ['Join the Organization', '加入组织'],
-  ['Last updated on', '最后更新于'],
-  ['Last updated', '最后更新于'],
   ['Overview', '概览'],
   ['Assistants', '助手与 Agent'],
   ['AI Tools', 'AI 工具'],
@@ -129,23 +127,25 @@ function swapTextNodes(lang) {
     if (!raw) continue;
     const trimmed = raw.replace(/ /g, ' ').trim();
     if (!trimmed) continue;
+    if (lang === 'zh' && /^Last updated( on)?/.test(trimmed)) {
+      const holder = node.parentElement;
+      if (holder) {
+        const date = holder.textContent.replace(/Last updated( on)?/, '').trim();
+        holder.textContent = date ? `最后更新于 ${date}` : '最后更新于';
+      }
+      continue;
+    }
     const hit = dict.get(trimmed);
     if (hit) {
       node.nodeValue = raw.replace(trimmed, hit);
       continue;
     }
     if (lang === 'zh') {
-      if (trimmed.startsWith('Last updated on')) {
-        node.nodeValue = raw.replace('Last updated on', '最后更新于');
-        continue;
-      }
+
       const items = trimmed.match(/^(\d+)\s+items?$/);
       if (items) node.nodeValue = raw.replace(trimmed, `${items[1]} 项`);
     } else {
-      if (trimmed.startsWith('最后更新于')) {
-        node.nodeValue = raw.replace('最后更新于', 'Last updated on');
-        continue;
-      }
+
       const items = trimmed.match(/^(\d+)\s+项$/);
       if (items) node.nodeValue = raw.replace(trimmed, `${items[1]} items`);
     }

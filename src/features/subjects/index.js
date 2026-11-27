@@ -57,18 +57,57 @@ export function SubjectIntro({slug}) {
   const {lang} = useLang();
   const subject = subjects.find((item) => item.slug === slug);
   const label = subject ? (lang === 'zh' && subject.labelZh ? subject.labelZh : subject.label) : slug;
-  if (lang === 'zh') {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    fetch('/search-index.json')
+      .then((response) => (response.ok ? response.json() : {entries: []}))
+      .then((data) => setEntries(data.entries ?? []))
+      .catch(() => setEntries([]));
+  }, []);
+
+  const courses = entries.filter(
+    (entry) => entry.kind === 'notes' && subject && entry.subject === subject.label
+  );
+
+  if (!courses.length) {
     return (
-      <p>
-        {label}方向目前还没有收录课程笔记。若你整理了相关课程的讲义，欢迎按
-        <Link to="/submit/">提交指引</Link>投稿。
+      <p className={styles.intro}>
+        {lang === 'zh' ? (
+          <>
+            {label}方向目前还没有收录课程笔记。若你整理了相关课程的讲义，欢迎按
+            <Link to="/submit/">提交指引</Link>投稿。
+          </>
+        ) : (
+          <>
+            No course notes are indexed under {label} yet. If you have notes for a course in this
+            area, see the <Link to="/submit/">submission guide</Link>.
+          </>
+        )}
       </p>
     );
   }
+
   return (
-    <p>
-      No course notes are indexed under {label} yet. If you have notes for a course in this
-      area, see the <Link to="/submit/">submission guide</Link>.
-    </p>
+    <>
+      <p className={styles.intro}>
+        {lang === 'zh'
+          ? `${label}方向目前收录 ${courses.length} 门课程。`
+          : `${courses.length} ${courses.length === 1 ? 'course is' : 'courses are'} indexed under ${label}.`}
+      </p>
+      <ul className={styles.courses}>
+        {courses.map((course) => (
+          <li key={course.url}>
+            <Link className={styles.courseCard} to={course.url}>
+              <strong className={styles.title}>{course.title}</strong>
+              <span className={styles.desc}>
+                {lang === 'zh' && course.descriptionZh ? course.descriptionZh : course.description}
+              </span>
+              <span className={styles.count}>{course.course}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
