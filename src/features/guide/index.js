@@ -35,7 +35,7 @@ function matchResources(goal) {
 }
 
 export function PathFinder() {
-  const {t} = useLang();
+  const {t, lang} = useLang();
   const [goal, setGoal] = useState('');
   const [submitted, setSubmitted] = useState('');
 
@@ -73,7 +73,7 @@ export function PathFinder() {
                 setSubmitted(path.keywords[0]);
               }}
             >
-              {path.title}
+              {lang === 'zh' && path.titleZh ? path.titleZh : path.title}
             </button>
           ))}
         </div>

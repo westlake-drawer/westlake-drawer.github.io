@@ -91,7 +91,21 @@ const THEME_PAIRS = [
   ['Community Hub', '社区中心'],
   ['Join the Organization', '加入组织'],
   ['Last updated on', '最后更新于'],
+  ['Overview', '概览'],
+  ['Assistants', '助手与 Agent'],
+  ['AI Tools', 'AI 工具'],
+  ['Plugins', '插件'],
+  ['Apps', '应用'],
+  ['Mathematics', '数学与应用数学'],
+  ['Physics', '物理学'],
+  ['Chemistry', '化学'],
+  ['Biological Sciences', '生物科学'],
+  ['Materials Science', '材料科学与工程'],
+  ['Electronic Information', '电子信息工程'],
+  ['Artificial Intelligence', '人工智能'],
+  ['Clinical Medicine', '临床医学'],
 ];
+
 
 function swapTextNodes(lang) {
   const pairs = lang === 'zh' ? THEME_PAIRS : THEME_PAIRS.map(([en, zh]) => [zh, en]);
@@ -102,10 +116,28 @@ function swapTextNodes(lang) {
   for (const node of nodes) {
     const raw = node.nodeValue;
     if (!raw) continue;
-    const trimmed = raw.trim();
+    const trimmed = raw.replace(/ /g, ' ').trim();
     if (!trimmed) continue;
     const hit = dict.get(trimmed);
-    if (hit) node.nodeValue = raw.replace(trimmed, hit);
+    if (hit) {
+      node.nodeValue = raw.replace(trimmed, hit);
+      continue;
+    }
+    if (lang === 'zh') {
+      if (trimmed.startsWith('Last updated on')) {
+        node.nodeValue = raw.replace('Last updated on', '最后更新于');
+        continue;
+      }
+      const items = trimmed.match(/^(\d+)\s+items?$/);
+      if (items) node.nodeValue = raw.replace(trimmed, `${items[1]} 项`);
+    } else {
+      if (trimmed.startsWith('最后更新于')) {
+        node.nodeValue = raw.replace('最后更新于', 'Last updated on');
+        continue;
+      }
+      const items = trimmed.match(/^(\d+)\s+项$/);
+      if (items) node.nodeValue = raw.replace(trimmed, `${items[1]} items`);
+    }
   }
 }
 

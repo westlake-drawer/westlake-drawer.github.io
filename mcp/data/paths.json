@@ -23,7 +23,8 @@
           "url": "/notes/math/linear-algebra/",
           "why": "Vector spaces and matrices, shared by analysis, probability and machine learning."
         }
-      ]
+      ],
+      "titleZh": "数学基础"
     },
     {
       "id": "analysis",
@@ -53,7 +54,8 @@
           "url": "/notes/math/probability-theory/",
           "why": "Revisit probability inside the measure framework to check the abstractions land."
         }
-      ]
+      ],
+      "titleZh": "分析路线"
     },
     {
       "id": "pde",
@@ -78,7 +80,8 @@
           "url": "/notes/math/partial-differential-equations/",
           "why": "Start from the heat and fluid equations, with characteristics."
         }
-      ]
+      ],
+      "titleZh": "偏微分方程"
     },
     {
       "id": "quantum",
@@ -101,7 +104,8 @@
           "url": "/notes/physics/quantum-mechanics/",
           "why": "Old quantum theory through path integrals, with worked problems."
         }
-      ]
+      ],
+      "titleZh": "量子力学"
     },
     {
       "id": "ai-tools",
@@ -130,7 +134,8 @@
           "url": "/tools/3d-fabric/",
           "why": "When you need 3D work, keep the same quality gate on output."
         }
-      ]
+      ],
+      "titleZh": "AI 工具链"
     },
     {
       "id": "chemistry",
@@ -150,7 +155,8 @@
           "url": "/notes/chemistry/general-chemistry/",
           "why": "Definition/proposition/example structure makes it a good first chemistry course."
         }
-      ]
+      ],
+      "titleZh": "普通化学"
     }
   ]
 }

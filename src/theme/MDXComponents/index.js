@@ -10,6 +10,7 @@ import McpSetup from '@site/src/features/mcp';
 import SubmitButtons from '@site/src/features/submit';
 import {SubjectGrid, SubjectIntro} from '@site/src/features/subjects';
 import Bi from '@site/src/features/i18n/Bi';
+import LangTabs from '@site/src/features/i18n/LangTabs';
 
 export default {
   ...MDXComponents,
@@ -25,6 +26,7 @@ export default {
   SubjectGrid,
   SubjectIntro,
   Bi,
+  LangTabs,
   Tabs,
   TabItem,
 };

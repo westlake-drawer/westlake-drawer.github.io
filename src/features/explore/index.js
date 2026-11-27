@@ -96,7 +96,7 @@ export default function Explore() {
               setCourse('all');
             }}
           >
-            <span>{value}</span>
+            <span>{lang === 'zh' ? subjectZh[value] ?? value : value}</span>
             <span>{countFor((entry) => entry.subject === value)}</span>
           </button>
         ))}

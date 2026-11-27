@@ -365,3 +365,17 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* Legal pages follow the site language: hide the tab bar, show one pane. */
+.lang-tabs .tabs-container > ul.tabs {
+  display: none;
+}
+/* Heading anchors should stay invisible until hover (JSX headings showed them). */
+.theme-doc-markdown .hash-link {
+  opacity: 0;
+}
+.theme-doc-markdown h1:hover .hash-link,
+.theme-doc-markdown h2:hover .hash-link,
+.theme-doc-markdown h3:hover .hash-link {
+  opacity: 0.4;
+}
