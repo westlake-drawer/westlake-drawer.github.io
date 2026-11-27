@@ -91,6 +91,7 @@ const THEME_PAIRS = [
   ['Community Hub', '社区中心'],
   ['Join the Organization', '加入组织'],
   ['Last updated on', '最后更新于'],
+  ['Last updated', '最后更新于'],
   ['Overview', '概览'],
   ['Assistants', '助手与 Agent'],
   ['AI Tools', 'AI 工具'],
@@ -104,7 +105,17 @@ const THEME_PAIRS = [
   ['Electronic Information', '电子信息工程'],
   ['Artificial Intelligence', '人工智能'],
   ['Clinical Medicine', '临床医学'],
+  ['Governance', '组织章程'],
+  ['Academic Integrity', '学术诚信'],
+  ['Contributor Licence', '贡献者许可'],
+  ['Disclaimer', '免责声明'],
+  ['Name & Affiliation', '名称与关联'],
+  ['Notices', '通知与反通知'],
+  ['Responsibility', '责任分配'],
+  ['Tool Policy', '工具收录'],
+  ['Legal & Safety', '法律与安全'],
 ];
+
 
 
 function swapTextNodes(lang) {
