@@ -41,6 +41,29 @@ export default function Home() {
             </span>
           </div>
         </section>
+        <section className={styles.discover} aria-labelledby="discover-title">
+          <Link className={styles.searchBox} to="/explore/">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M10.5 3a7.5 7.5 0 1 1 4.6 13.4l4.2 4.2-1.4 1.4-4.2-4.2A7.5 7.5 0 0 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" fill="currentColor"/>
+            </svg>
+            <span className={styles.searchText}>{t('home.search')}</span>
+            <span className={styles.searchHint}>{t('home.searchHint')}</span>
+          </Link>
+          <div className={styles.shortcuts}>
+            <Link className={styles.shortcut} to="/notes/math/">
+              <strong>{t('home.shortMath')}</strong>
+              <span>{t('home.shortMathSub')}</span>
+            </Link>
+            <Link className={styles.shortcut} to="/notes/chemistry/">
+              <strong>{t('home.shortChem')}</strong>
+              <span>{t('home.shortChemSub')}</span>
+            </Link>
+            <Link className={styles.shortcut} to="/tools/">
+              <strong>{t('home.shortTools')}</strong>
+              <span>{t('home.shortToolsSub')}</span>
+            </Link>
+          </div>
+        </section>
         <section className={styles.explore} aria-labelledby="explore-title">
           <div className={styles.sectionHeading}>
             <h2 id="explore-title">{t('home.collection')}</h2>
